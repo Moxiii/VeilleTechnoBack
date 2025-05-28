@@ -8,8 +8,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProjectRes {
-private String projectName;
-private String status;
-private List<Technologies> technologies;
+public class UpdateProjectReq {
+private String name;
+private List<String> links;
+private List<Technologies> technology;
 }

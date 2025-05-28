@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Technologies;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.moxi.veilletechnoback.Project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,6 +21,7 @@ private String name;
 private String category;
 private Duration trainingTime;
 @ManyToMany(mappedBy = "technologies")
+@JsonBackReference
 private List<Project> projects;
 @OneToMany(mappedBy = "technologies", cascade = CascadeType.ALL)
 private List<Ressources> resources;

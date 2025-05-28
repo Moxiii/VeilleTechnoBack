@@ -3,6 +3,7 @@ package com.moxi.veilletechnoback.Config.Security;
 import com.moxi.veilletechnoback.Config.JWT.JwtAuthenticationFilter;
 import com.moxi.veilletechnoback.Config.JWT.JwtUtils;
 import com.moxi.veilletechnoback.User.CustomUserDetails.CustomUserDetailsService;
+import com.moxi.veilletechnoback.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,8 @@ public class SecurityConfig {
 
 @Autowired
 private CustomUserDetailsService customUserDetailsService;
-
 @Autowired
-private JwtUtils jwtUtil;
+private UserService userService;
 
 @Bean
 public RestTemplate restTemplate() {
@@ -37,7 +37,7 @@ public RestTemplate restTemplate() {
 @Bean
 public AuthenticationManager authManager(HttpSecurity http) throws Exception {
 	AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-	authenticationManagerBuilder.userDetailsService(customUserDetailsService);
+	authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
 	return authenticationManagerBuilder.build();
 }
 
@@ -54,7 +54,6 @@ public StrictHttpFirewall httpFirewall() {
 }
 
 
-
 @SuppressWarnings("deprecation")
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,21 +61,21 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 			.cors()
 			.and()
 			.csrf()
-			.ignoringRequestMatchers("/api/**")
+			.ignoringRequestMatchers("/**")
 			.ignoringRequestMatchers("/chat/**")
 			.ignoringRequestMatchers("/ws/**")
 			.and()
 			.authorizeRequests()
-			.requestMatchers("/api/**").permitAll()
+			.requestMatchers("/**").permitAll()
 			.requestMatchers("/ws/**").permitAll()
 			.requestMatchers("/admin/**").hasAnyRole("admin")
 			.anyRequest().authenticated()
 			.and()
-			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+			.addFilterBefore(new JwtAuthenticationFilter(new JwtUtils() , customUserDetailsService , userService), UsernamePasswordAuthenticationFilter.class)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.formLogin()
-			.loginPage("/api/auth/login") // Specify the URL of your custom login page
+			.loginPage("/api/auth/login")
 			.loginProcessingUrl("/process-login")
 			.defaultSuccessUrl("/index")
 			.failureUrl("/custom-login?error=true")

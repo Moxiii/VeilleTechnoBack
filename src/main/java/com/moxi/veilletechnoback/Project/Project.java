@@ -1,5 +1,7 @@
 package com.moxi.veilletechnoback.Project;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.moxi.veilletechnoback.Technologies.Technologies;
+import com.moxi.veilletechnoback.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +18,8 @@ public class Project {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
+@ManyToOne
+private User user;
 private String name;
 private LocalDate startDate;
 private LocalDate endDate;
@@ -30,5 +34,6 @@ private List<String>  links;
 		joinColumns = @JoinColumn(name = "project_id"),
 		inverseJoinColumns = @JoinColumn(name = "technologies_id")
 )
+@JsonManagedReference
 private List<Technologies> technologies;
 }

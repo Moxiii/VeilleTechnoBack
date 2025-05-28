@@ -63,11 +63,8 @@ public ResponseEntity<String> createUser(@RequestBody User user) {
 @ResponseBody
 public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest req) {
 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	User existingUser = null;
+	User existingUser = userService.findByUsername(user.getUsername().toLowerCase());
 
-	if (user.getUsername() != null) {
-		existingUser = userService.findByUsername(user.getUsername().toLowerCase());
-	}
 
 	if (existingUser != null) {
 		if (passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
@@ -85,11 +82,11 @@ public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest req) {
 						SecurityContext sc = SecurityContextHolder.getContext();
 						sc.setAuthentication(authentication);
 						HttpSession session = req.getSession(true);
-						String accessToken = jwtUtil.createAccessToken(user);
-						String refreshToken = jwtUtil.createRefreshToken(user);
-						tokenManager.addToken(user.getUsername() + "_refresh",refreshToken);
-						tokenManager.addToken(user.getUsername(), accessToken);
-						ResponseCookie cookie = ResponseCookie.from("acces_token" , accessToken)
+						String accessToken = jwtUtil.createAccessToken(existingUser);
+						String refreshToken = jwtUtil.createRefreshToken(existingUser);
+						tokenManager.addToken(existingUser.getUsername() + "_refresh",refreshToken);
+						tokenManager.addToken(existingUser.getUsername(), accessToken);
+						ResponseCookie cookie = ResponseCookie.from("access_token" , accessToken)
 								.maxAge(Duration.ofHours(1))
 								.httpOnly(true)
 								.secure(false)
@@ -118,7 +115,8 @@ public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest req) {
 public ResponseEntity<String> logout(HttpServletRequest req) {
 	String token = jwtUtil.extractTokenFromCookie(req);
 	if (token != null) {
-		String username = jwtUtil.extractUsername(token);
+		User currentUser = userService.findById(jwtUtil.extractUserId(token));
+		String username = userService.findByUsername(currentUser.getUsername()).toString();
 		if (username != null) {
 			tokenManager.removeToken(username);
 			SecurityContextHolder.getContext().setAuthentication(null);
@@ -133,7 +131,8 @@ public ResponseEntity<?> refreshToken(HttpServletRequest req) {
 	if(token != null) {
 		String newAccessToken = jwtUtil.checkToken(req);
 		if (newAccessToken != null) {
-			String username = jwtUtil.extractUsername(newAccessToken);
+			User currentUser = userService.findById(jwtUtil.extractUserId(token));
+			String username = userService.findByUsername(currentUser.getUsername()).toString();
 			return ResponseEntity.ok(new LoginRes(username));
 		}else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
@@ -146,15 +145,18 @@ public ResponseEntity<?> refreshToken(HttpServletRequest req) {
 @GetMapping("/check-token")
 public ResponseEntity<?> checkToken(HttpServletRequest req) {
 	String token = jwtUtil.extractTokenFromCookie(req);
+	User currentUser = userService.findById(jwtUtil.extractUserId(token));
+	String username = userService.findByUsername(currentUser.getUsername()).toString();
 	if (token != null && jwtUtil.validateToken(token)) {
-		return ResponseEntity.ok(new LoginRes(jwtUtil.extractUsername(token)));
+		return ResponseEntity.ok(new LoginRes(username));
 	}
 	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
 }
 @GetMapping("/status")
 public ResponseEntity<?> getStatus(@CookieValue(name = "access_token" , required = false) String token) {
 if (token != null) {
-	String username = jwtUtil.extractUsername(token);
+	User currentUser = userService.findById(jwtUtil.extractUserId(token));
+	String username = userService.findByUsername(currentUser.getUsername()).toString();
 	return ResponseEntity.ok(Map.of("authenticated", true, "username", username));
 }
 	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
