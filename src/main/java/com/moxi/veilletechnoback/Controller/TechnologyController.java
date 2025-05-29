@@ -22,6 +22,7 @@ private TechnologyRes toRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
 	res.setName(technology.getName());
 	res.setId(technology.getId());
+	res.setCategory(technology.getCategory());
 	return res;
 
 }
@@ -42,6 +43,7 @@ public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 	Technology newTechnology = new Technology();
 	newTechnology.setName(technology.getName());
+	newTechnology.setCategory(technology.getCategory());
 	technologyService.save(newTechnology);
 	return new ResponseEntity<>(toRes(newTechnology), HttpStatus.CREATED);
 }
@@ -49,6 +51,7 @@ public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
 	Technology technology = technologyService.findById(id);
 	technology.setName(updateTechnology.getName() != null ? updateTechnology.getName() : technology.getName());
+	technology.setCategory(updateTechnology.getCategory() != null ? updateTechnology.getCategory() : technology.getCategory());
 	technologyService.save(technology);
 	return new ResponseEntity<>(toRes(technology), HttpStatus.OK);
 }

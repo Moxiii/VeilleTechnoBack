@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.Technology;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.moxi.veilletechnoback.Enum.techCategory;
 import com.moxi.veilletechnoback.Project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,11 +19,11 @@ public class Technology {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private String name;
-private String category;
 private Duration trainingTime;
 @ManyToMany(mappedBy = "technology")
 @JsonBackReference
 private List<Project> projects;
 @OneToMany(mappedBy = "technology", cascade = CascadeType.ALL)
 private List<Ressources> resources;
+private techCategory category;
 }
