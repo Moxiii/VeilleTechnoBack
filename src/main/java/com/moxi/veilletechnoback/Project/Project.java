@@ -1,12 +1,11 @@
 package com.moxi.veilletechnoback.Project;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.moxi.veilletechnoback.Technologies.Technologies;
+import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,10 +29,10 @@ private String status;
 private List<String>  links;
 @ManyToMany
 @JoinTable(
-		name = "project_technologies",
+		name = "project_technology",
 		joinColumns = @JoinColumn(name = "project_id"),
-		inverseJoinColumns = @JoinColumn(name = "technologies_id")
+		inverseJoinColumns = @JoinColumn(name = "technology_id")
 )
 @JsonManagedReference
-private List<Technologies> technologies;
+private List<Technology> technology;
 }

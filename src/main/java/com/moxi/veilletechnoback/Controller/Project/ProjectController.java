@@ -28,7 +28,10 @@ private ProjectRes toRes(Project project) {
 	ProjectRes res = new ProjectRes();
 	res.setProjectName(project.getName());
 	res.setStatus(project.getStatus());
-	res.setTechnologies(project.getTechnologies());
+	res.setTechnology(project.getTechnology());
+	res.setStartDate(project.getStartDate());
+	res.setEndDate(project.getEndDate());
+	res.setLinks(project.getLinks());
 	return res;
 }
 @GetMapping
@@ -51,7 +54,7 @@ public ResponseEntity<?> createProject(@RequestBody Project project) {
 	Project newProject = new Project();
 	newProject.setName(project.getName());
 	newProject.setStatus(project.getStatus());
-	newProject.setTechnologies(project.getTechnologies());
+	newProject.setTechnology(project.getTechnology());
 	newProject.setUser(currentuser);
 	projectService.save(newProject);
 	return new ResponseEntity<>(toRes(newProject), HttpStatus.CREATED);
@@ -61,7 +64,7 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 	Project project = projectRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("Project not found"));
 	project.setName(updateProject.getName() != null ? updateProject.getName() : project.getName());
 	project.setLinks(updateProject.getLinks() != null ? updateProject.getLinks() : project.getLinks());
-	project.setTechnologies(updateProject.getTechnology() != null ? updateProject.getTechnology() : project.getTechnologies());
+	project.setTechnology(updateProject.getTechnology() != null ? updateProject.getTechnology() : project.getTechnology());
 	projectService.save(project);
 	return new ResponseEntity<>(toRes(project), HttpStatus.OK);
 }

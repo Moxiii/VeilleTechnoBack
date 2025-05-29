@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.Ressources;
 
-import com.moxi.veilletechnoback.Technologies.Technologies;
+import com.moxi.veilletechnoback.Technology.Technology;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +18,6 @@ private Long id;
 private String title;
 private String url;
 @ManyToOne
-@JoinColumn(name = "technologies_id")
-private Technologies technologies;
+@JoinColumn(name = "technology_id")
+private Technology technology;
 }

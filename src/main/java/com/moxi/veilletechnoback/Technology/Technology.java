@@ -1,4 +1,4 @@
-package com.moxi.veilletechnoback.Technologies;
+package com.moxi.veilletechnoback.Technology;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.moxi.veilletechnoback.Project.Project;
@@ -13,16 +13,16 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Technologies {
+public class Technology {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private String name;
 private String category;
 private Duration trainingTime;
-@ManyToMany(mappedBy = "technologies")
+@ManyToMany(mappedBy = "technology")
 @JsonBackReference
 private List<Project> projects;
-@OneToMany(mappedBy = "technologies", cascade = CascadeType.ALL)
+@OneToMany(mappedBy = "technology", cascade = CascadeType.ALL)
 private List<Ressources> resources;
 }

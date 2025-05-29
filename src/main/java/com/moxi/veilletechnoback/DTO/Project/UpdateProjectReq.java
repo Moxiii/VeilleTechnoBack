@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.DTO.Project;
 
-import com.moxi.veilletechnoback.Technologies.Technologies;
+import com.moxi.veilletechnoback.Technology.Technology;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public class UpdateProjectReq {
 private String name;
 private List<String> links;
-private List<Technologies> technology;
+private List<Technology> technology;
 }
