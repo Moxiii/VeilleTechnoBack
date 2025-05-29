@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback;
 
+import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectRepository;
 import com.moxi.veilletechnoback.Technology.Technology;
@@ -46,7 +47,7 @@ public CommandLineRunner init(ProjectRepository projectRepository) {
 			List<String> links = List.of("x.fr");
 			Project portfolio = new Project();
 			portfolio.setName("Portfolio");
-			portfolio.setStatus("en cours");
+			portfolio.setStatus(Status.onGoing);
 			portfolio.setLinks(links);
 			portfolio.setUser(moxi);
 			portfolio.setStartDate(now);

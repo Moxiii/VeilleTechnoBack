@@ -1,4 +1,4 @@
-package com.moxi.veilletechnoback.Controller.User;
+package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.User.User;

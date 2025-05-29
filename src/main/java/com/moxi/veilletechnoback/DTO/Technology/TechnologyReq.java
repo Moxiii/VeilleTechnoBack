@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TechnologyRes {
+public class TechnologyReq {
 private long id;
 private String name;
 }

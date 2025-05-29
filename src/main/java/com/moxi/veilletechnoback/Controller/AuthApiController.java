@@ -1,7 +1,8 @@
-package com.moxi.veilletechnoback.Controller.Auth;
+package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.Config.JWT.JwtUtils;
 import com.moxi.veilletechnoback.Config.JWT.TokenManager;
+import com.moxi.veilletechnoback.DTO.AUTH.LOGIN.LoginReq;
 import com.moxi.veilletechnoback.DTO.AUTH.LOGIN.LoginRes;
 import com.moxi.veilletechnoback.User.User;
 import com.moxi.veilletechnoback.User.UserService;
@@ -61,19 +62,19 @@ public ResponseEntity<String> createUser(@RequestBody User user) {
 
 @PostMapping(path = {"/login"})
 @ResponseBody
-public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest req) {
+public ResponseEntity<?> login(@RequestBody LoginReq loginReq, HttpServletRequest req) {
 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	User existingUser = userService.findByUsername(user.getUsername().toLowerCase());
+	User existingUser = userService.findByUsername(loginReq.getUsername().toLowerCase());
 
 
 	if (existingUser != null) {
-		if (passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+		if (passwordEncoder.matches(loginReq.getPassword(), existingUser.getPassword())) {
 			String validToken = tokenManager.getValidToken(existingUser.getUsername());
 			if (validToken != null) {
 				return ResponseEntity.ok(new LoginRes(existingUser.getUsername()));
 			} else {
 
-				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(existingUser.getUsername(), user.getPassword());
+				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(existingUser.getUsername(), loginReq.getPassword());
 
 				try {
 					Authentication authentication = authenticationManager.authenticate(token);

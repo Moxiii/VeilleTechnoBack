@@ -49,7 +49,7 @@ public PasswordEncoder passwordEncoder() {
 @Bean
 public StrictHttpFirewall httpFirewall() {
 	StrictHttpFirewall firewall = new StrictHttpFirewall();
-	firewall.setAllowSemicolon(true); // Allow semicolon in URLs
+	firewall.setAllowSemicolon(true);
 	return firewall;
 }
 

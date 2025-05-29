@@ -22,6 +22,6 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
 		throw new UsernameNotFoundException("User not found with username: " + username);
 	}
 
-	return new CustomUserDetails(user.getEmail(), user.getPassword(), user);
+	return new CustomUserDetails(user.getUsername(), user.getPassword(), user);
 }
 }

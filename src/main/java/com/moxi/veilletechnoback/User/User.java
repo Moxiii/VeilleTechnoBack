@@ -1,5 +1,7 @@
 package com.moxi.veilletechnoback.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.moxi.veilletechnoback.Project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
+import java.util.List;
 
 
 @Getter
@@ -73,7 +75,9 @@ private String password;
 private String dateInscription;
 private String Description;
 
-
+@OneToMany(mappedBy = "user")
+@JsonManagedReference
+private List<Project> projects;
 
 private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 public User(String username, String email, String password) {

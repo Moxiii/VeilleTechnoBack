@@ -11,5 +11,7 @@ import java.util.List;
 public class UpdateProjectReq {
 private String name;
 private List<String> links;
-private List<Technology> technology;
+private List<Long> technology;
+
+
 }

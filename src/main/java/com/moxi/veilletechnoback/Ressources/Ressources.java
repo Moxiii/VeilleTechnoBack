@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Ressources;
 
+import com.moxi.veilletechnoback.Enum.Ressources.labelName;
 import com.moxi.veilletechnoback.Technology.Technology;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,8 +16,8 @@ public class Ressources {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-private String title;
 private String url;
+private labelName label;
 @ManyToOne
 @JoinColumn(name = "technology_id")
 private Technology technology;

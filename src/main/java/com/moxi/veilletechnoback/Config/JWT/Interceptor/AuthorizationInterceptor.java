@@ -26,15 +26,9 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
 			return true;
 		}
 		if (uri.startsWith("/api/auth")) {
-			return true; //
+			return true;
 		}
-		if(requireAuthorization != null) {
-			if(!SecurityUtils.isAuthorized(request , jwtUtil)){
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.getWriter().write("Unauthorized access");
-				return false;
-			}
-		}
+
 	}
 	return true;
 }

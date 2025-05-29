@@ -2,7 +2,6 @@ package com.moxi.veilletechnoback.DTO.Project;
 
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
 import com.moxi.veilletechnoback.Enum.Status;
-import com.moxi.veilletechnoback.Technology.Technology;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProjectRes {
+public class ProjectReq {
+private long id;
 private String projectName;
 private Status status;
 private List<TechnologyRes> technology;

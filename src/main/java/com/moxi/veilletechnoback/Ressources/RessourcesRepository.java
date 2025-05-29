@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RessourcesRepository extends JpaRepository<Ressources, String> {
+	public Ressources findById(long id);
 }

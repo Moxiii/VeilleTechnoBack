@@ -54,7 +54,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			System.out.println("Authentication set for user: " + username);  // <--- Log ici
+			System.out.println("Authentication set for user: " + username);
 		} else {
 			System.out.println("User not found for token");
 		}

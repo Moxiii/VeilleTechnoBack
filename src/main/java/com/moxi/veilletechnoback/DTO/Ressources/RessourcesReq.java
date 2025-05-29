@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RessourcesRes {
+public class RessourcesReq {
 private long id;
 private Technology technology;
 private labelName label;
