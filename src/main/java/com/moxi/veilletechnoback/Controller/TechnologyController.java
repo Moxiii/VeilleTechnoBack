@@ -1,8 +1,10 @@
 package com.moxi.veilletechnoback.Controller;
 
 
+import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
+import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,6 +26,17 @@ private TechnologyRes toRes(Technology technology) {
 	res.setName(technology.getName());
 	res.setId(technology.getId());
 	res.setCategory(technology.getCategory());
+	List<BasicProjectRes> basicProjects = new ArrayList<>();
+	if(technology.getProjects() != null){
+		for (Project project : technology.getProjects()) {
+			BasicProjectRes basic = new BasicProjectRes();
+			basic.setId(project.getId());
+			basic.setProjectName(project.getName());
+			basicProjects.add(basic);
+		}
+	}
+	res.setProjects(basicProjects);
+	res.setTrainingTime(technology.getTrainingTime());
 	return res;
 
 }

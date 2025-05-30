@@ -1,6 +1,8 @@
 package com.moxi.veilletechnoback.Technology;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.moxi.veilletechnoback.Enum.techCategory;
 import com.moxi.veilletechnoback.Project.Project;
 import jakarta.persistence.*;
@@ -14,14 +16,17 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id"
+)
 public class Technology {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private String name;
-private Duration trainingTime;
+private Duration trainingTime = Duration.ZERO;
 @ManyToMany(mappedBy = "technology")
-@JsonBackReference
 private List<Project> projects;
 @OneToMany(mappedBy = "technology", cascade = CascadeType.ALL)
 private List<Ressources> resources;

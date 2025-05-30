@@ -1,7 +1,5 @@
 package com.moxi.veilletechnoback.Project;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.User.User;
@@ -17,6 +15,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id"
+)
 public class Project {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,5 @@ private List<String>  links;
 		joinColumns = @JoinColumn(name = "project_id"),
 		inverseJoinColumns = @JoinColumn(name = "technology_id")
 )
-@JsonManagedReference
 private List<Technology> technology = new ArrayList<>();
 }
