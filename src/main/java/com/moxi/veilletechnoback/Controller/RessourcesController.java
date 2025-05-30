@@ -2,14 +2,18 @@ package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesReq;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesRes;
+import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
 import com.moxi.veilletechnoback.Ressources.Ressources;
 import com.moxi.veilletechnoback.Ressources.RessourcesService;
+import com.moxi.veilletechnoback.Technology.Technology;
+import com.moxi.veilletechnoback.Technology.TechnologyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,12 +21,16 @@ import java.util.List;
 public class RessourcesController {
 @Autowired
 private RessourcesService ressourcesService;
+@Autowired
+private TechnologyService technologyService;
 
 private RessourcesRes toRes(Ressources ressources) {
 	RessourcesRes res = new RessourcesRes();
 	res.setLabel(ressources.getLabel());
 	res.setUrl(ressources.getUrl());
-	res.setTechnology(ressources.getTechnology());
+	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
+	basicTechnologyRes.setTechnology(ressources.getTechnology().getName());
+	res.setTechnology(basicTechnologyRes);
 	return res;
 }
 
@@ -42,7 +50,11 @@ public ResponseEntity<?> getRessourcesById(@PathVariable long id) {
 @PostMapping
 public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources) {
 	Ressources newRessources = new Ressources();
-	newRessources.setTechnology(ressources.getTechnology());
+	Technology tech = technologyService.findById(ressources.getTechnologyId());
+	if(tech == null) {
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	newRessources.setTechnology(tech);
 	newRessources.setLabel(ressources.getLabel());
 	newRessources.setUrl(ressources.getUrl());
 	ressourcesService.save(newRessources);
@@ -50,9 +62,10 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody RessourcesReq updateRessources) {
+	Technology tech = technologyService.findById(updateRessources.getTechnologyId());
 	Ressources ressources = ressourcesService.findById(id);
 	ressources.setLabel(updateRessources.getLabel() != null ? updateRessources.getLabel() : ressources.getLabel());
-	ressources.setTechnology(updateRessources.getTechnology() != null ? updateRessources.getTechnology() : ressources.getTechnology());
+	ressources.setTechnology(tech != null ? tech : ressources.getTechnology());
 	ressources.setUrl(updateRessources.getUrl() != null ? updateRessources.getUrl() : ressources.getUrl());
 	ressourcesService.save(ressources);
 	return new ResponseEntity<>(toRes(ressources), HttpStatus.OK);

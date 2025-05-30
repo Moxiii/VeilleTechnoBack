@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class RessourcesReq {
 private long id;
-private Technology technology;
+private long technologyId;
 private labelName label;
 private String url;
 }
