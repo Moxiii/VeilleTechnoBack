@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.DTO.Project;
 
+import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
 import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Technology.Technology;
@@ -12,9 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ProjectRes {
-private String projectName;
+private String name;
 private Status status;
-private List<TechnologyRes> technology;
+private List<BasicTechnologyRes> technology;
 private LocalDate startDate;
 private LocalDate endDate;
 private List<String> links;

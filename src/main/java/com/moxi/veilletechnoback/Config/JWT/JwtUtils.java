@@ -118,12 +118,9 @@ public String extractTokenFromCookie(HttpServletRequest request) {
 	if(request.getCookies() != null){
 		for(Cookie cookie : request.getCookies()){
 			if("access_token".equals(cookie.getName())){
-				System.out.println("Cookie: " + cookie.getName() + " = " + cookie.getValue());
 				return cookie.getValue();
 			}
 		}
-	}else{
-		System.out.println("No cookies in request");
 	}
 	return null;
 }

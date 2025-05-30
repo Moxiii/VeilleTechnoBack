@@ -7,7 +7,7 @@ import com.moxi.veilletechnoback.DTO.AUTH.LOGIN.LoginRes;
 import com.moxi.veilletechnoback.User.User;
 import com.moxi.veilletechnoback.User.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
-
+@Slf4j
 @RestController
 @RequestMapping("api/auth")
 public class AuthApiController {
@@ -62,27 +61,22 @@ public ResponseEntity<String> createUser(@RequestBody User user) {
 
 @PostMapping(path = {"/login"})
 @ResponseBody
-public ResponseEntity<?> login(@RequestBody LoginReq loginReq, HttpServletRequest req) {
+public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	User existingUser = userService.findByUsername(loginReq.getUsername().toLowerCase());
 
 
 	if (existingUser != null) {
+		log.info("current user : {}", existingUser.getUsername());
 		if (passwordEncoder.matches(loginReq.getPassword(), existingUser.getPassword())) {
-			String validToken = tokenManager.getValidToken(existingUser.getUsername());
-			if (validToken != null) {
-				return ResponseEntity.ok(new LoginRes(existingUser.getUsername()));
-			} else {
-
+			log.info("password matches");
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(existingUser.getUsername(), loginReq.getPassword());
-
+				log.info("token : {}", token);
 				try {
 					Authentication authentication = authenticationManager.authenticate(token);
 					if (authentication != null && authentication.isAuthenticated()) {
-						UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 						SecurityContext sc = SecurityContextHolder.getContext();
 						sc.setAuthentication(authentication);
-						HttpSession session = req.getSession(true);
 						String accessToken = jwtUtil.createAccessToken(existingUser);
 						String refreshToken = jwtUtil.createRefreshToken(existingUser);
 						tokenManager.addToken(existingUser.getUsername() + "_refresh",refreshToken);
@@ -101,7 +95,6 @@ public ResponseEntity<?> login(@RequestBody LoginReq loginReq, HttpServletReques
 					}
 				} catch (AuthenticationException e) {
 					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
-				}
 			}
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
@@ -121,43 +114,27 @@ public ResponseEntity<String> logout(HttpServletRequest req) {
 		if (username != null) {
 			tokenManager.removeToken(username);
 			SecurityContextHolder.getContext().setAuthentication(null);
-			return ResponseEntity.status(HttpStatus.OK).body("User logged out successfully");
+			ResponseCookie cookie = ResponseCookie.from("access_token", "")
+					.maxAge(0)
+					.httpOnly(true)
+					.secure(false)
+					.sameSite("Lax")
+					.path("/")
+					.build();
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.SET_COOKIE , cookie.toString())
+					.body("User logged out successfully");
 		}
 	}
 	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
 }
-@PostMapping("/refresh-token")
-public ResponseEntity<?> refreshToken(HttpServletRequest req) {
-	String token = jwtUtil.extractTokenFromCookie(req);
-	if(token != null) {
-		String newAccessToken = jwtUtil.checkToken(req);
-		if (newAccessToken != null) {
-			User currentUser = userService.findById(jwtUtil.extractUserId(token));
-			String username = userService.findByUsername(currentUser.getUsername()).toString();
-			return ResponseEntity.ok(new LoginRes(username));
-		}else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
-		}
-	}
 
-	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing token");
-}
 
-@GetMapping("/check-token")
-public ResponseEntity<?> checkToken(HttpServletRequest req) {
-	String token = jwtUtil.extractTokenFromCookie(req);
-	User currentUser = userService.findById(jwtUtil.extractUserId(token));
-	String username = userService.findByUsername(currentUser.getUsername()).toString();
-	if (token != null && jwtUtil.validateToken(token)) {
-		return ResponseEntity.ok(new LoginRes(username));
-	}
-	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
-}
 @GetMapping("/status")
 public ResponseEntity<?> getStatus(@CookieValue(name = "access_token" , required = false) String token) {
 if (token != null) {
 	User currentUser = userService.findById(jwtUtil.extractUserId(token));
-	String username = userService.findByUsername(currentUser.getUsername()).toString();
+	String username = currentUser.getUsername();
 	return ResponseEntity.ok(Map.of("authenticated", true, "username", username));
 }
 	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));

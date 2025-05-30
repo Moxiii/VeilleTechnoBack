@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.Controller;
 
 
+import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@RequireAuthorization
 @RestController
 @RequestMapping("/technology")
 public class TechnologyController {
@@ -30,8 +31,7 @@ private TechnologyRes toRes(Technology technology) {
 	if(technology.getProjects() != null){
 		for (Project project : technology.getProjects()) {
 			BasicProjectRes basic = new BasicProjectRes();
-			basic.setId(project.getId());
-			basic.setProjectName(project.getName());
+			basic.setName(project.getName());
 			basicProjects.add(basic);
 		}
 	}

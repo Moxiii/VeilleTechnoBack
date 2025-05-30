@@ -1,7 +1,6 @@
 package com.moxi.veilletechnoback.Config.JWT.Interceptor;
 
 import com.moxi.veilletechnoback.Config.JWT.JwtUtils;
-import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
@@ -28,8 +27,17 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
 		if (uri.startsWith("/api/auth")) {
 			return true;
 		}
-
+		if(requireAuthorization != null) {
+			String token = jwtUtil.extractTokenFromCookie(request);
+			if(token != null || !jwtUtil.validateToken(token)) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("Unauthorized : Invalid or missing token");
+				return false;
+			}
+		}
 	}
+
 	return true;
 }
+
 }

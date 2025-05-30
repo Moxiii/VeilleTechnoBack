@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BasicProjectRes {
-	private long id;
-	private String projectName;
+	private String name;
 
 }
 

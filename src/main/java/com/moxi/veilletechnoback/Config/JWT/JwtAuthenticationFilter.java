@@ -43,9 +43,8 @@ public JwtAuthenticationFilter(JwtUtils jwtUtil, CustomUserDetailsService custom
 
 @Override
 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-	String token = jwtUtil.extractTokenFromCookie(request);
-
-	if (token != null && jwtUtil.validateToken(token)) {
+	String token = jwtUtil.checkToken(request);
+	if (token != null) {
 		User currentUser = userService.findById(jwtUtil.extractUserId(token));
 		if (currentUser != null) {
 			String username = currentUser.getUsername();

@@ -1,8 +1,10 @@
 package com.moxi.veilletechnoback.Controller;
 
+import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Project.ProjectReq;
 import com.moxi.veilletechnoback.DTO.Project.UpdateProjectReq;
+import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
 import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Project.Project;
@@ -22,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
+@RequireAuthorization
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
@@ -34,13 +36,13 @@ private TechnologyService technologyService;
 
 private ProjectRes toRes(Project project) {
 	ProjectRes res = new ProjectRes();
-	res.setProjectName(project.getName());
+	res.setName(project.getName());
 	res.setStatus(project.getStatus());
-	List< TechnologyRes> technologyName = Optional.ofNullable(project.getTechnology())
+	List< BasicTechnologyRes> technologyName = Optional.ofNullable(project.getTechnology())
 			.orElse(Collections.emptyList())
 			.stream()
 			.map(tech ->{
-				TechnologyRes technologyRes = new TechnologyRes();
+				BasicTechnologyRes technologyRes = new BasicTechnologyRes();
 				technologyRes.setName(tech.getName());
 				return technologyRes;
 	}).toList();

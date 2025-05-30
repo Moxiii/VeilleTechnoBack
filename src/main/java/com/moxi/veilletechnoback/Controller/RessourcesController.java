@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Controller;
 
+import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesReq;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesRes;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
@@ -13,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.List;
+@RequireAuthorization
 @RestController
 @RequestMapping("/ressources")
 public class RessourcesController {
@@ -29,7 +30,7 @@ private RessourcesRes toRes(Ressources ressources) {
 	res.setLabel(ressources.getLabel());
 	res.setUrl(ressources.getUrl());
 	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
-	basicTechnologyRes.setTechnology(ressources.getTechnology().getName());
+	basicTechnologyRes.setName(ressources.getTechnology().getName());
 	res.setTechnology(basicTechnologyRes);
 	return res;
 }
