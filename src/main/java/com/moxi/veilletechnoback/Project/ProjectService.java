@@ -27,8 +27,8 @@ public void delete(Project project) {
 	projectRepository.delete(project);
 }
 
-public Project findById(long id) {
-	return projectRepository.findById(id);
+public Project findByUserAndId(User user , long id) {
+	return projectRepository.findByUserAndId(user , id);
 }
 
 

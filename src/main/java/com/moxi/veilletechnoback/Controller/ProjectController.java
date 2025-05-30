@@ -63,13 +63,13 @@ public ResponseEntity<?> getProject() {
 }
 @GetMapping("/{id}")
 public ResponseEntity<?> getProjectById(@PathVariable long id) {
-	Project project = projectService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Project project = projectService.findByUserAndId(currentUser, id);
 	return new ResponseEntity<>(toRes(project) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
-	User currentuser = SecurityUtils.getCurrentUser();
-	System.out.println(currentuser);
+	User currentUser = SecurityUtils.getCurrentUser();
 	Project newProject = new Project();
 	newProject.setName(projectReq.getProjectName());
 	if (projectReq.getProjectName() == null || projectReq.getProjectName().isBlank()) {
@@ -79,10 +79,10 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 	newProject.setStartDate(projectReq.getStartDate() != null ? projectReq.getStartDate() : null);
 	newProject.setEndDate(projectReq.getEndDate() != null ? projectReq.getEndDate() : null);
 	newProject.setLinks(projectReq.getLinks() != null ? projectReq.getLinks() : null);
-	newProject.setUser(currentuser);
+	newProject.setUser(currentUser);
 	if (projectReq.getTechnology() != null) {
 		List<Technology> technologies = projectReq.getTechnology().stream()
-				.map(techRes -> technologyService.findById(techRes.getId()))
+				.map(techRes -> technologyService.findByUserAndId(currentUser,techRes.getId()))
 				.toList();
 
 		newProject.setTechnology(technologies);
@@ -94,7 +94,8 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody UpdateProjectReq updateProject) {
-	Project project = projectService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Project project = projectService.findByUserAndId(currentUser,id);
 	project.setName(updateProject.getName() != null ? updateProject.getName() : project.getName());
 	project.setLinks(updateProject.getLinks() != null ? updateProject.getLinks() : project.getLinks());
 	List<Technology> technologies = updateProject.getTechnology() != null
@@ -107,7 +108,8 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteProject(@PathVariable long id) {
-	Project project = projectService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Project project = projectService.findByUserAndId(currentUser,id);
 	projectService.delete(project);
 	return new ResponseEntity<>(HttpStatus.OK);
 }

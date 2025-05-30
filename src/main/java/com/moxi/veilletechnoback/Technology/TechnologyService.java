@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Technology;
 
+import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,8 +14,8 @@ public List<Technology> findAll() {
 	return ressourcesRepository.findAll();
 }
 
-public Technology findById(long id) {
-	return ressourcesRepository.findById(id);
+public Technology findByUserAndId(User user , long id) {
+	return ressourcesRepository.findByUserAndId(user,id);
 }
 
 public void save(Technology newTechnology) {

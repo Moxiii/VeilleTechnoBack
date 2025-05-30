@@ -2,6 +2,7 @@ package com.moxi.veilletechnoback.Controller;
 
 
 import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
+import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
@@ -9,6 +10,7 @@ import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 
+import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,20 +52,24 @@ public ResponseEntity<?> getTechnology() {
 }
 @GetMapping("/{id}")
 public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
-	Technology technology = technologyService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	return new ResponseEntity<>(toRes(technology) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
+	User currentUser = SecurityUtils.getCurrentUser();
 	Technology newTechnology = new Technology();
 	newTechnology.setName(technology.getName());
 	newTechnology.setCategory(technology.getCategory());
+	newTechnology.setUser(currentUser);
 	technologyService.save(newTechnology);
 	return new ResponseEntity<>(toRes(newTechnology), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
-	Technology technology = technologyService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	technology.setName(updateTechnology.getName() != null ? updateTechnology.getName() : technology.getName());
 	technology.setCategory(updateTechnology.getCategory() != null ? updateTechnology.getCategory() : technology.getCategory());
 	technologyService.save(technology);
@@ -71,7 +77,8 @@ public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody Te
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
-	Technology technology = technologyService.findById(id);
+	User currentUser = SecurityUtils.getCurrentUser();
+	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	technologyService.delete(technology);
 	return new ResponseEntity<>(HttpStatus.OK);
 }

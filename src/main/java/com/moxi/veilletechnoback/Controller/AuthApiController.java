@@ -110,7 +110,7 @@ public ResponseEntity<String> logout(HttpServletRequest req) {
 	String token = jwtUtil.extractTokenFromCookie(req);
 	if (token != null) {
 		User currentUser = userService.findById(jwtUtil.extractUserId(token));
-		String username = userService.findByUsername(currentUser.getUsername()).toString();
+		String username = userService.findById(currentUser.getId()).toString();
 		if (username != null) {
 			tokenManager.removeToken(username);
 			SecurityContextHolder.getContext().setAuthentication(null);

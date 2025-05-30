@@ -1,8 +1,11 @@
 package com.moxi.veilletechnoback;
 
+import com.moxi.veilletechnoback.Enum.Ressources.labelName;
 import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectRepository;
+import com.moxi.veilletechnoback.Ressources.Ressources;
+import com.moxi.veilletechnoback.Ressources.RessourcesRepository;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyRepository;
 import com.moxi.veilletechnoback.User.User;
@@ -20,20 +23,12 @@ import java.util.List;
 @SpringBootApplication
 public class VeilleTechnoBackApplication {
 
-public VeilleTechnoBackApplication(UserRepository userRepository, ProjectRepository projectRepository, TechnologyRepository technologyRepository) {
-	this.userRepository = userRepository;
-	this.projectRepository = projectRepository;
-	this.technologyRepository = technologyRepository;
-}
 
 public static void main(String[] args) {
 	SpringApplication.run(VeilleTechnoBackApplication.class, args);
 }
-private final UserRepository userRepository;
-private final ProjectRepository projectRepository;
-private final TechnologyRepository technologyRepository;
 @Bean
-public CommandLineRunner init(ProjectRepository projectRepository) {
+public CommandLineRunner init(UserRepository userRepository, TechnologyRepository technologyRepository, ProjectRepository projectRepository,  RessourcesRepository ressourcesRepository) {
 	return args -> {
 		User moxi = new User("moxi", "moxi@moxi.com","ee");
 		if (userRepository.count()==0){
@@ -63,6 +58,7 @@ public CommandLineRunner init(ProjectRepository projectRepository) {
 			List<Technology> technologyList = techNames.stream().map(name -> {
 				Technology tech = new Technology();
 				tech.setName(name);
+				tech.setUser(moxi);
 				tech.setProjects(List.of(portfolio));
 				return tech;
 			}).toList();
@@ -72,7 +68,14 @@ public CommandLineRunner init(ProjectRepository projectRepository) {
 			System.out.println("Technologies initialisées.");
 
 		}
-
+		if(ressourcesRepository.count()==0){
+			Ressources gsap = new Ressources();
+			gsap.setTechnology(technologyRepository.findByUserAndId(moxi , 1));
+			gsap.setLabel(labelName.Docs);
+			gsap.setUrl("https://github.com/moxi/veilletechnoback");
+			gsap.setUser(moxi);
+			ressourcesRepository.save(gsap);
+		}
 	};
 }
 }

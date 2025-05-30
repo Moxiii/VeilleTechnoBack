@@ -11,5 +11,5 @@ public interface ProjectRepository extends JpaRepository<Project, String> {
 Project findByName(String name);
 
 List<Project> findByUser(User user);
-Project findById(long id);
+Project findByUserAndId(User user , long id);
 }
