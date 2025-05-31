@@ -132,10 +132,13 @@ public ResponseEntity<String> logout(HttpServletRequest req) {
 
 @GetMapping("/status")
 public ResponseEntity<?> getStatus(@CookieValue(name = "access_token" , required = false) String token) {
-if (token != null) {
+if (token != null && jwtUtil.validateToken(token)) {
+	try{
 	User currentUser = userService.findById(jwtUtil.extractUserId(token));
-	String username = currentUser.getUsername();
-	return ResponseEntity.ok(Map.of("authenticated", true, "username", username));
+	return ResponseEntity.ok(Map.of("authenticated", true));
+} catch (Exception e) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
+	}
 }
 	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("authenticated", false));
 }
