@@ -16,6 +16,7 @@ public class ProjectRes {
 private String name;
 private Status status;
 private List<BasicTechnologyRes> technology;
+private LocalDate createdDate;
 private LocalDate startDate;
 private LocalDate endDate;
 private List<String> links;

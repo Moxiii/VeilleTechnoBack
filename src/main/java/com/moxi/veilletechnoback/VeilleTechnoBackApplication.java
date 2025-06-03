@@ -30,6 +30,7 @@ public static void main(String[] args) {
 @Bean
 public CommandLineRunner init(UserRepository userRepository, TechnologyRepository technologyRepository, ProjectRepository projectRepository,  RessourcesRepository ressourcesRepository) {
 	return args -> {
+		LocalDate now = LocalDate.now();
 		User moxi = new User("moxi", "moxi@moxi.com","ee");
 		if (userRepository.count()==0){
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -38,13 +39,13 @@ public CommandLineRunner init(UserRepository userRepository, TechnologyRepositor
 			userRepository.save(moxi);
 		}
 		if(projectRepository.count()==0){
-			LocalDate now = LocalDate.now();
 			List<String> links = List.of("x.fr");
 			Project portfolio = new Project();
 			portfolio.setName("Portfolio");
 			portfolio.setStatus(Status.onGoing);
 			portfolio.setLinks(links);
 			portfolio.setUser(moxi);
+			portfolio.setCreateAt(now);
 			portfolio.setStartDate(now);
 			portfolio.setEndDate(now);
 			projectRepository.save(portfolio);
@@ -60,6 +61,7 @@ public CommandLineRunner init(UserRepository userRepository, TechnologyRepositor
 				tech.setName(name);
 				tech.setUser(moxi);
 				tech.setProjects(List.of(portfolio));
+				tech.setCreateAt(now);
 				return tech;
 			}).toList();
 			technologyRepository.saveAll(technologyList);
@@ -70,11 +72,34 @@ public CommandLineRunner init(UserRepository userRepository, TechnologyRepositor
 		}
 		if(ressourcesRepository.count()==0){
 			Ressources gsap = new Ressources();
-			gsap.setTechnology(technologyRepository.findByUserAndId(moxi , 1));
+			Technology tech = technologyRepository.findByUserAndId(moxi , 1);
+			gsap.setTechnology(tech);
 			gsap.setLabel(labelName.Docs);
 			gsap.setUrl("https://github.com/moxi/veilletechnoback");
 			gsap.setUser(moxi);
+			gsap.setCreateAt(now);
 			ressourcesRepository.save(gsap);
+			Ressources doc = new Ressources();
+			doc.setTechnology(tech);
+			doc.setLabel(labelName.Docs);
+			doc.setUrl("https://github.com/moxi/veilletechnoback");
+			doc.setUser(moxi);
+			doc.setCreateAt(now);
+			ressourcesRepository.save(doc);
+			Ressources tutorial = new Ressources();
+			tutorial.setTechnology(tech);
+			tutorial.setLabel(labelName.Tutorial);
+			tutorial.setUrl("https://github.com/moxi/veilletechnoback");
+			tutorial.setUser(moxi);
+			tutorial.setCreateAt(now);
+			ressourcesRepository.save(tutorial);
+			Ressources framer = new Ressources();
+			framer.setTechnology(technologyRepository.findByUserAndId(moxi , 2));
+			framer.setUser(moxi);
+			framer.setUrl("https://github.com/moxi/veilletechnoback");
+			framer.setCreateAt(now);
+			framer.setLabel(labelName.Example);
+			ressourcesRepository.save(framer);
 		}
 	};
 }

@@ -47,6 +47,7 @@ private ProjectRes toRes(Project project) {
 				return technologyRes;
 	}).toList();
 	res.setTechnology(technologyName);
+	res.setCreatedDate(project.getCreateAt());
 	res.setStartDate(project.getStartDate());
 	res.setEndDate(project.getEndDate());
 	res.setLinks(project.getLinks());

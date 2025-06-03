@@ -1,6 +1,8 @@
 package com.moxi.veilletechnoback.Controller;
 
 
+import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
+import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
 import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
@@ -18,13 +20,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @RequireAuthorization
 @RestController
 @RequestMapping("/technology")
 public class TechnologyController {
 @Autowired
 private TechnologyService technologyService;
-private TechnologyRes toRes(Technology technology) {
+@Autowired
+private SubCategoryService subCategoryService;
+
+
+private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
 	res.setName(technology.getName());
 	res.setId(technology.getId());
@@ -37,6 +44,8 @@ private TechnologyRes toRes(Technology technology) {
 			basicProjects.add(basic);
 		}
 	}
+	res.setSubCategory(technology.getSubCategory());
+	res.setCreateAt(technology.getCreateAt());
 	res.setProjects(basicProjects);
 	res.setTrainingTime(technology.getTrainingTime());
 	return res;
@@ -46,7 +55,7 @@ private TechnologyRes toRes(Technology technology) {
 public ResponseEntity<?> getTechnology() {
 	List<TechnologyRes> res = technologyService.findAll()
 			.stream()
-			.map(this::toRes)
+			.map(this::techToRes)
 			.toList();
 	return new ResponseEntity<>(res , HttpStatus.OK);
 }
@@ -54,7 +63,7 @@ public ResponseEntity<?> getTechnology() {
 public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
 	User currentUser = SecurityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
-	return new ResponseEntity<>(toRes(technology) , HttpStatus.OK);
+	return new ResponseEntity<>(techToRes(technology) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
@@ -63,17 +72,19 @@ public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 	newTechnology.setName(technology.getName());
 	newTechnology.setCategory(technology.getCategory());
 	newTechnology.setUser(currentUser);
-	technologyService.save(newTechnology);
-	return new ResponseEntity<>(toRes(newTechnology), HttpStatus.CREATED);
+	technologyService.create(technology.getName() , technology.getCategory() , currentUser);
+	return new ResponseEntity<>(techToRes(newTechnology), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
 	User currentUser = SecurityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
-	technology.setName(updateTechnology.getName() != null ? updateTechnology.getName() : technology.getName());
-	technology.setCategory(updateTechnology.getCategory() != null ? updateTechnology.getCategory() : technology.getCategory());
-	technologyService.save(technology);
-	return new ResponseEntity<>(toRes(technology), HttpStatus.OK);
+	SubCategory subCategory = null;
+	if(updateTechnology.getSubCategoryId() != null){
+		subCategory = subCategoryService.findById(updateTechnology.getSubCategoryId());
+	}
+	technologyService.update(technology , updateTechnology.getName(), updateTechnology.getCategory() , subCategory);
+	return new ResponseEntity<>(techToRes(technology), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
@@ -82,4 +93,5 @@ public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
 	technologyService.delete(technology);
 	return new ResponseEntity<>(HttpStatus.OK);
 }
+
 }
