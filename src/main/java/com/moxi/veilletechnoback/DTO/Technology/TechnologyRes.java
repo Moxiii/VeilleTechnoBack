@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.DTO.Technology;
 
 import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
+import com.moxi.veilletechnoback.DTO.Category.CatwithSub;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.Category.CategoryEnum;
 import lombok.Getter;
@@ -17,8 +18,7 @@ public class TechnologyRes {
 private long id;
 private String name;
 private LocalDate createAt;
-private CategoryEnum category;
+private CatwithSub category;
 private List<BasicProjectRes> projects = new ArrayList<>();
 private Duration trainingTime;
-private SubCategory subCategory;
 }

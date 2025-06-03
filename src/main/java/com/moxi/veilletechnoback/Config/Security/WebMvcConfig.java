@@ -17,8 +17,7 @@ public void addCorsMappings(CorsRegistry corsRegistry){
 	corsRegistry.addMapping("/**")
 			.allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
 			.allowCredentials(true)
-			.allowedOrigins("http://localhost:5173")
-			.allowedOrigins("http://veille.localhost")
+			.allowedOrigins("http://localhost:5173" ,"http://localhost:5174" , "http://veille.localhost")
 			.allowedHeaders("*");
 
 }

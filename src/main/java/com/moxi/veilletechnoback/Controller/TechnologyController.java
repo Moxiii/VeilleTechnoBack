@@ -5,6 +5,8 @@ import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
 import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
+import com.moxi.veilletechnoback.DTO.Category.CatwithSub;
+import com.moxi.veilletechnoback.DTO.Category.sub.SubCategoryRes;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
@@ -35,7 +37,12 @@ private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
 	res.setName(technology.getName());
 	res.setId(technology.getId());
-	res.setCategory(technology.getCategory());
+	CatwithSub catDTO = new CatwithSub();
+	catDTO.setType(technology.getCategory());
+	List<SubCategory> subCats = subCategoryService.findByCategoryEnum(technology.getCategory());
+	List<SubCategoryRes> subCatDTO = subCats.stream().map(sub -> new SubCategoryRes(sub.getName())).toList();
+	catDTO.setSubCategories(subCatDTO);
+	res.setCategory(catDTO);
 	List<BasicProjectRes> basicProjects = new ArrayList<>();
 	if(technology.getProjects() != null){
 		for (Project project : technology.getProjects()) {
@@ -44,7 +51,6 @@ private TechnologyRes techToRes(Technology technology) {
 			basicProjects.add(basic);
 		}
 	}
-	res.setSubCategory(technology.getSubCategory());
 	res.setCreateAt(technology.getCreateAt());
 	res.setProjects(basicProjects);
 	res.setTrainingTime(technology.getTrainingTime());

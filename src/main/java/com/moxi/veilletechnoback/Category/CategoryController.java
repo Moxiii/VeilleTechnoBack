@@ -2,6 +2,7 @@ package com.moxi.veilletechnoback.Category;
 
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Category.CategoryReq;
+import com.moxi.veilletechnoback.DTO.Category.CategoryRes;
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,9 @@ private CategoryService categoryService;
 public ResponseEntity<Map<String,Object>> getAllCategories() {
 	User currentUser = SecurityUtils.getCurrentUser();
 	List<String> defaultCategory = Arrays.stream(CategoryEnum.values()).map(Enum::name).toList();
-	List<Category> customCategory = categoryService.findByUser(currentUser);
+	List<CategoryRes> customCategory = categoryService.findByUser(currentUser).stream()
+			.map(c -> new CategoryRes(c.getName(), c.getType().toString()))
+			.toList();
 	Map<String,Object> response = new HashMap<>();
 	response.put("default", defaultCategory);
 	response.put("custom", customCategory);

@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.Category.SubCat;
 
 import com.moxi.veilletechnoback.Category.Category;
+import com.moxi.veilletechnoback.Category.CategoryEnum;
 import com.moxi.veilletechnoback.Category.CategoryRepository;
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,10 @@ public void deleteSub(long id, User user)  {
 
 public SubCategory findById(Long subCategoryId) {
 	return subCategoryRepository.findById(subCategoryId).orElseThrow();
+}
+
+public List<SubCategory> findByCategoryEnum(CategoryEnum category) {
+	return subCategoryRepository.findByCategory_Type(category);
 }
 }
 

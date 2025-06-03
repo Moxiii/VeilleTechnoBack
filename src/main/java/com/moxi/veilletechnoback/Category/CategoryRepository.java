@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Category;
 
+import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
