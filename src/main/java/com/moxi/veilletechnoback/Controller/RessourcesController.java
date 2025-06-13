@@ -34,6 +34,8 @@ private RessourcesRes toRes(Ressources ressources) {
 	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
 	basicTechnologyRes.setName(ressources.getTechnology().getName());
 	res.setTechnology(basicTechnologyRes);
+	res.setCreateAt(ressources.getCreateAt());
+	res.setDescription(ressources.getDescription());
 	return res;
 }
 

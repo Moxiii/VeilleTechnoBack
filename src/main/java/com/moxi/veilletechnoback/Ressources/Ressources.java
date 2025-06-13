@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
+import java.time.LocalDate;
 
 
 @Getter
@@ -21,6 +21,8 @@ private User user;
 private Long id;
 private String url;
 private labelName label;
+private LocalDate createAt;
+private String description;
 @ManyToOne
 @JoinColumn(name = "technology_id")
 private Technology technology;

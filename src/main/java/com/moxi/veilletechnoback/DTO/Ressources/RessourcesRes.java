@@ -6,12 +6,15 @@ import com.moxi.veilletechnoback.Enum.Ressources.labelName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
 public class RessourcesRes {
 private BasicTechnologyRes technology;
+private LocalDate createAt;
 private labelName label;
 private String url;
+private String description;
 }
