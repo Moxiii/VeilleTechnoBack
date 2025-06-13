@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -69,22 +70,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 			.requestMatchers("/admin/**").hasAnyRole("admin")
 			.anyRequest().authenticated()
 			.and()
-			.addFilterBefore(new JwtAuthenticationFilter(new JwtUtils() , customUserDetailsService , userService), UsernamePasswordAuthenticationFilter.class)
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.formLogin()
-			.loginPage("/api/auth/login")
-			.loginProcessingUrl("/process-login")
-			.defaultSuccessUrl("/index")
-			.failureUrl("/custom-login?error=true")
-			.permitAll()
-			.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-			.and()
-			.logout()
-			.logoutSuccessUrl("/api/auth/logout")
-			.invalidateHttpSession(true)
-			.deleteCookies("JSESSIONID")
-			.permitAll();
+			.oauth2ResourceServer(oauth->oauth.jwt(Customizer.withDefaults())).build();
 
 	return http.build();
 }
