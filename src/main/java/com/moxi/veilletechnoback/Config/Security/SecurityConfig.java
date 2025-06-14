@@ -1,7 +1,6 @@
 package com.moxi.veilletechnoback.Config.Security;
 
-import com.moxi.veilletechnoback.Config.JWT.JwtAuthenticationFilter;
-import com.moxi.veilletechnoback.Config.JWT.JwtUtils;
+import com.moxi.veilletechnoback.Config.JWT.JwtCookieResolver;
 import com.moxi.veilletechnoback.User.CustomUserDetails.CustomUserDetailsService;
 import com.moxi.veilletechnoback.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.client.RestTemplate;
 
@@ -62,15 +59,16 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 			.cors()
 			.and()
 			.csrf()
-			.ignoringRequestMatchers("/api/auth/**")
-			.and()
-			.authorizeRequests()
-			.requestMatchers("/**").permitAll()
-			.requestMatchers("/ws/**").permitAll()
-			.requestMatchers("/admin/**").hasAnyRole("admin")
-			.anyRequest().authenticated()
-			.and()
-			.oauth2ResourceServer(oauth->oauth.jwt(Customizer.withDefaults())).build();
+			.disable()
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeRequests(auth -> auth
+					.requestMatchers("/api/auth/**" , "/public/**").permitAll()
+					.anyRequest().authenticated()
+			)
+			.oauth2ResourceServer(oauth -> oauth
+					.bearerTokenResolver(new JwtCookieResolver())
+					.jwt(Customizer.withDefaults())
+			);
 
 	return http.build();
 }
