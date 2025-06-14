@@ -37,7 +37,7 @@ public CommandLineRunner init(UserRepository userRepository, TechnologyRepositor
 ) {
 	return args -> {
 		LocalDate now = LocalDate.now();
-		User moxi = new User("moxi", "moxi@moxi.com","ee");
+		User moxi = new User("moxi","moxi");
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			String formattedDate = dateFormat.format(new Date());

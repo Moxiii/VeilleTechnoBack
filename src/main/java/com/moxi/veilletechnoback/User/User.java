@@ -25,7 +25,7 @@ private String dateInscription;
 @JsonManagedReference
 private List<Project> projects;
 
-public User(String id , String username, ) {
+public User(String id , String username) {
     this.id = id;
 	this.username = username;
 

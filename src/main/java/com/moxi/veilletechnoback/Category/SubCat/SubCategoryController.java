@@ -18,22 +18,23 @@ import java.util.Map;
 public class SubCategoryController {
 @Autowired
 private SubCategoryService subCategoryService;
-
+@Autowired
+private SecurityUtils securityUtils;
 
 @GetMapping
 public List<SubCategory> getAllCategories() {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	return  subCategoryService.findByUser(currentUser);
 }
 @PostMapping
 public ResponseEntity<?> addCategory(@RequestBody SubCategoryReq category) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	subCategoryService.create(category.getName() , category.getCategoryId() , currentUser);
 	return ResponseEntity.status(HttpStatus.CREATED).build();
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteCategory(@PathVariable long id)  {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	subCategoryService.deleteSub(id , currentUser);
 	return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 }
