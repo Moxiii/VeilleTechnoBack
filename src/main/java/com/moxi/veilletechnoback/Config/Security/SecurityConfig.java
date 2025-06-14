@@ -23,8 +23,7 @@ import org.springframework.web.client.RestTemplate;
 public class SecurityConfig {
 
 
-@Autowired
-private CustomUserDetailsService customUserDetailsService;
+
 @Autowired
 private UserService userService;
 
@@ -32,12 +31,7 @@ private UserService userService;
 public RestTemplate restTemplate() {
 	return new RestTemplate();
 }
-@Bean
-public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-	AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-	authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-	return authenticationManagerBuilder.build();
-}
+
 
 @Bean
 public PasswordEncoder passwordEncoder() {

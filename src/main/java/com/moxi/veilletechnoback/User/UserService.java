@@ -8,10 +8,8 @@ public class UserService {
 @Autowired
 private UserRepository userRepository;
 
-public User findByUsername(String username) {
-	return userRepository.findByUsername(username);
-}
-public User findById(long id){
+
+public User findById(String id){
 	return userRepository.findById(id);
 }
 

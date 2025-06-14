@@ -16,23 +16,18 @@ import java.util.List;
 @Setter
 @Entity
 public class User {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+
+private String id;
 private String username;
-private String email;
-private String password;
 private String dateInscription;
 
 @OneToMany(mappedBy = "user")
 @JsonManagedReference
 private List<Project> projects;
 
-private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-public User(String username, String email, String password) {
+public User(String id , String username, ) {
+    this.id = id;
 	this.username = username;
-	this.email = email;
-	this.password = passwordEncoder.encode(password);
 
 }
 
