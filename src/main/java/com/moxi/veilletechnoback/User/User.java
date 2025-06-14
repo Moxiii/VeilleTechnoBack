@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Entity
 public class User {
-
+@Id
 private String id;
 private String username;
 private String dateInscription;
