@@ -1,5 +1,7 @@
-package com.moxi.veilletechnoback.Category;
+package com.moxi.veilletechnoback.Controller;
 
+import com.moxi.veilletechnoback.Category.CategoryEnum;
+import com.moxi.veilletechnoback.Category.CategoryService;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Category.CategoryReq;
 import com.moxi.veilletechnoback.DTO.Category.CategoryRes;
@@ -19,11 +21,12 @@ import java.util.Map;
 public class CategoryController {
 @Autowired
 private CategoryService categoryService;
-
+@Autowired
+private SecurityUtils securityUtils;
 
 @GetMapping
 public ResponseEntity<Map<String,Object>> getAllCategories() {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	List<String> defaultCategory = Arrays.stream(CategoryEnum.values()).map(Enum::name).toList();
 	List<CategoryRes> customCategory = categoryService.findByUser(currentUser).stream()
 			.map(c -> new CategoryRes(c.getName(), c.getType().toString()))
@@ -35,13 +38,13 @@ public ResponseEntity<Map<String,Object>> getAllCategories() {
 }
 @PostMapping
 public ResponseEntity<?> addCategory(@RequestBody CategoryReq category) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	categoryService.createCustomCategory(currentUser , category.getName() , category.getType());
 	return ResponseEntity.status(HttpStatus.CREATED).build();
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteCategory(@PathVariable long id)  {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	categoryService.deleteCategoryById(id , currentUser);
 	return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 }

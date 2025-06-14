@@ -1,6 +1,5 @@
 package com.moxi.veilletechnoback.Controller;
 
-import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesReq;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesRes;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-@RequireAuthorization
 @RestController
 @RequestMapping("/ressources")
 public class RessourcesController {
@@ -26,6 +24,8 @@ public class RessourcesController {
 private RessourcesService ressourcesService;
 @Autowired
 private TechnologyService technologyService;
+@Autowired
+private SecurityUtils securityUtils;
 
 private RessourcesRes toRes(Ressources ressources) {
 	RessourcesRes res = new RessourcesRes();
@@ -49,14 +49,14 @@ public ResponseEntity<?> getRessources() {
 }
 @GetMapping("/{id}")
 public ResponseEntity<?> getRessourcesById(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	return new ResponseEntity<>(toRes(ressources) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources) {
 	Ressources newRessources = new Ressources();
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser, ressources.getTechnologyId());
 	if(tech == null) {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -70,7 +70,7 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody RessourcesReq updateRessources) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser,updateRessources.getTechnologyId());
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	ressources.setLabel(updateRessources.getLabel() != null ? updateRessources.getLabel() : ressources.getLabel());
@@ -81,7 +81,7 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteRessources(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	ressourcesService.delete(ressources);
 	return new ResponseEntity<>(HttpStatus.OK);

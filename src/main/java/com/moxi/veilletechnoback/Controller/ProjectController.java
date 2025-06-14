@@ -1,11 +1,9 @@
 package com.moxi.veilletechnoback.Controller;
 
-import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Project.ProjectReq;
 import com.moxi.veilletechnoback.DTO.Project.UpdateProjectReq;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
-import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
 import com.moxi.veilletechnoback.Enum.Status;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectService;
@@ -24,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@RequireAuthorization
+
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
@@ -32,7 +30,8 @@ public class ProjectController {
 private ProjectService projectService;
 @Autowired
 private TechnologyService technologyService;
-
+@Autowired
+private SecurityUtils securityUtils;
 
 private ProjectRes toRes(Project project) {
 	ProjectRes res = new ProjectRes();
@@ -55,7 +54,7 @@ private ProjectRes toRes(Project project) {
 }
 @GetMapping
 public ResponseEntity<?> getProject() {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	List<ProjectRes> res = projectService.findAllByUser(currentUser)
 			.stream()
 			.map(this::toRes)
@@ -64,13 +63,13 @@ public ResponseEntity<?> getProject() {
 }
 @GetMapping("/{id}")
 public ResponseEntity<?> getProjectById(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser, id);
 	return new ResponseEntity<>(toRes(project) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Project newProject = new Project();
 	newProject.setName(projectReq.getProjectName());
 	if (projectReq.getProjectName() == null || projectReq.getProjectName().isBlank()) {
@@ -95,7 +94,7 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody UpdateProjectReq updateProject) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser,id);
 	project.setName(updateProject.getName() != null ? updateProject.getName() : project.getName());
 	project.setLinks(updateProject.getLinks() != null ? updateProject.getLinks() : project.getLinks());
@@ -109,7 +108,7 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteProject(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser,id);
 	projectService.delete(project);
 	return new ResponseEntity<>(HttpStatus.OK);

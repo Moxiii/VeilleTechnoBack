@@ -3,7 +3,7 @@ package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
-import com.moxi.veilletechnoback.Config.JWT.Annotation.RequireAuthorization;
+
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Category.CatwithSub;
 import com.moxi.veilletechnoback.DTO.Category.sub.SubCategoryRes;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequireAuthorization
 @RestController
 @RequestMapping("/technology")
 public class TechnologyController {
@@ -31,7 +30,8 @@ public class TechnologyController {
 private TechnologyService technologyService;
 @Autowired
 private SubCategoryService subCategoryService;
-
+@Autowired
+private SecurityUtils securityUtils;
 
 private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
@@ -67,13 +67,13 @@ public ResponseEntity<?> getTechnology() {
 }
 @GetMapping("/{id}")
 public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	return new ResponseEntity<>(techToRes(technology) , HttpStatus.OK);
 }
 @PostMapping
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology newTechnology = new Technology();
 	newTechnology.setName(technology.getName());
 	newTechnology.setCategory(technology.getCategory());
@@ -83,7 +83,7 @@ public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	SubCategory subCategory = null;
 	if(updateTechnology.getSubCategoryId() != null){
@@ -94,7 +94,7 @@ public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody Te
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
-	User currentUser = SecurityUtils.getCurrentUser();
+	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	technologyService.delete(technology);
 	return new ResponseEntity<>(HttpStatus.OK);
