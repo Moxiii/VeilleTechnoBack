@@ -13,7 +13,7 @@ public class KeycloakAdminConfig {
 Keycloak adminKc(
 		@Value("${kc.server}") String server,
 		@Value("${kc.admin.user}") String admin,
-		@Value("${kc.admin.pass}") String pass) {
+		@Value("${kc.admin.password}") String pass) {
 
 	return KeycloakBuilder.builder()
 			.serverUrl(server)

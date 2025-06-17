@@ -3,7 +3,9 @@ package com.moxi.veilletechnoback.Config.Keycloak;
 
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
 import jakarta.ws.rs.core.Response;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -20,7 +22,16 @@ public class KeycloakService {
 private Keycloak adminKc;
 
 public AccessTokenResponse login(String username, String password) {
-	return adminKc.tokenManager().getAccessToken();
+	return KeycloakBuilder.builder()
+			.serverUrl("http://auth.localhost")
+			.realm("VeilleRealm")
+			.clientId("front")
+			.grantType(OAuth2Constants.PASSWORD)
+			.username(username)
+			.password(password)
+			.build()
+			.tokenManager()
+			.getAccessToken();
 }
 
 public String createUser(RegisterDTO dto){
