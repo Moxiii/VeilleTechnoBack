@@ -11,12 +11,12 @@ public class JwtCookieResolver implements BearerTokenResolver {
 private final DefaultBearerTokenResolver delegate = new DefaultBearerTokenResolver();
 @Override
 public String resolve(HttpServletRequest request) {
-	if (request.getCookies() == null) {
-	return Arrays.stream(request.getCookies())
+	Cookie[] cookies = request.getCookies();
+	if (cookies == null) return null;
+	return Arrays.stream(cookies)
 			.filter(c -> "KEYCLOAK_TOKEN".equals(c.getName()))
 			.map(Cookie::getValue)
 			.findFirst()
 			.orElseGet(() -> delegate.resolve(request));
 }
-return delegate.resolve(request);}
 }
