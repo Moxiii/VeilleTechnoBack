@@ -2,19 +2,13 @@ package com.moxi.veilletechnoback.Controller;
 
 
 import com.moxi.veilletechnoback.Config.Keycloak.KeycloakService;
-import com.moxi.veilletechnoback.Config.Security.JwtCookieResolver;
+import com.moxi.veilletechnoback.DTO.AUTH.Login.LoginDTO;
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
 import com.moxi.veilletechnoback.User.UserService;
-import com.nimbusds.oauth2.sdk.TokenResponse;
-import com.zaxxer.hikari.util.Credentials;
-import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +30,7 @@ private KeycloakService keycloakService;
 @Autowired
 private UserService userService;
 @PostMapping("/login")
-public ResponseEntity<Void> login(@RequestBody Credentials cred) {
+public ResponseEntity<Void> login(@RequestBody LoginDTO cred) {
 	AccessTokenResponse tok = keycloakService.login(cred.getUsername(), cred.getPassword());
 	jwtDecoder.decode(tok.getToken());
 	ResponseCookie cookie = ResponseCookie.from("KEYCLOAK_TOKEN" , tok.getToken())
