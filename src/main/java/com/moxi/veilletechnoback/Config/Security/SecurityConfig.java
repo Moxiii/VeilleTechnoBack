@@ -52,7 +52,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 			.csrf()
 			.disable()
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.authorizeRequests(auth -> auth
+			.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/api/auth/**" , "/public/**").permitAll()
 					.anyRequest().authenticated()
 			)
