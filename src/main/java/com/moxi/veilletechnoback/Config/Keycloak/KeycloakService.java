@@ -10,6 +10,7 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,10 @@ import java.util.List;
 public class KeycloakService {
 @Autowired
 private Keycloak adminKc;
-
+@Value("${kc.server}") String server;
 public AccessTokenResponse login(String username, String password) {
 	return KeycloakBuilder.builder()
-			.serverUrl("http://auth.localhost")
+			.serverUrl(server)
 			.realm("VeilleRealm")
 			.clientId("front")
 			.grantType(OAuth2Constants.PASSWORD)
