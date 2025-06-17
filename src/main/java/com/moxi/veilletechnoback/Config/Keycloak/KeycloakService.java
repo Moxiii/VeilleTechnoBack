@@ -3,7 +3,6 @@ package com.moxi.veilletechnoback.Config.Keycloak;
 
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
 import jakarta.ws.rs.core.Response;
-import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -11,19 +10,23 @@ import org.keycloak.representations.AccessTokenResponse;
 
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-@RequiredArgsConstructor
+
 @Service
 public class KeycloakService {
-
-private final Keycloak adminKc;
+@Autowired
+private Keycloak adminKc;
+@Value("${kc.server}")
+private String serverUrl;
 public AccessTokenResponse login(String username, String password) {
 	return KeycloakBuilder.builder()
-			.serverUrl("http://auth.localhost")
+			.serverUrl(serverUrl)
 			.realm("VeilleRealm")
 			.clientId("front")
 			.grantType(OAuth2Constants.PASSWORD)
