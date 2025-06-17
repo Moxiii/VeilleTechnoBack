@@ -2,6 +2,7 @@ package com.moxi.veilletechnoback.Config.Keycloak;
 
 
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
@@ -23,16 +24,21 @@ public class KeycloakService {
 private Keycloak adminKc;
 @Value("${kc.server}") String server;
 public AccessTokenResponse login(String username, String password) {
-	return KeycloakBuilder.builder()
-			.serverUrl(server)
-			.realm("VeilleRealm")
-			.clientId("front")
-			.grantType(OAuth2Constants.PASSWORD)
-			.username(username)
-			.password(password)
-			.build()
-			.tokenManager()
-			.getAccessToken();
+	try {
+		return KeycloakBuilder.builder()
+				.serverUrl(server)
+				.realm("VeilleRealm")
+				.clientId("front")
+				.grantType(OAuth2Constants.PASSWORD)
+				.username(username)
+				.password(password)
+				.build()
+				.tokenManager()
+				.grantToken();
+	} catch (BadRequestException bre) {
+		throw new IllegalStateException(
+				"Échec de connexion : " + bre.getResponse().readEntity(String.class), bre);
+	}
 }
 
 public String createUser(RegisterDTO dto){
