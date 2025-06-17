@@ -38,7 +38,6 @@ public ResponseEntity<Void> login(@RequestBody LoginDTO cred) {
 			.sameSite("Lax")
 			.path("/")
 			.maxAge(Duration.ofSeconds(tok.getExpiresIn())).build();
-
 	return ResponseEntity.noContent()
 			.header(HttpHeaders.SET_COOKIE, cookie.toString())
 			.build();
