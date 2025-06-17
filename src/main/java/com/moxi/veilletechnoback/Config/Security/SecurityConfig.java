@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.Config.Security;
 
-import com.moxi.veilletechnoback.Config.JWT.JwtCookieResolver;
+import com.moxi.veilletechnoback.Config.Security.JwtCookieResolver;
 import com.moxi.veilletechnoback.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
