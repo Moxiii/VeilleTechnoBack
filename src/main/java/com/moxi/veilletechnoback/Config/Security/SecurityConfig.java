@@ -53,7 +53,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 			.disable()
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/api/auth/**" , "/public/**").permitAll()
+					.requestMatchers("/auth/**" , "/public/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.oauth2ResourceServer(oauth -> oauth
