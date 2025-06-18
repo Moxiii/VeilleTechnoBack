@@ -35,7 +35,8 @@ public ResponseEntity<Void> login(@RequestBody LoginDTO cred) {
 	jwtDecoder.decode(tok.getToken());
 	ResponseCookie cookie = ResponseCookie.from("KEYCLOAK_TOKEN" , tok.getToken())
 			.httpOnly(true)
-			.sameSite("Lax")
+			.sameSite("None")
+			.secure(true)
 			.path("/")
 			.maxAge(Duration.ofSeconds(tok.getExpiresIn())).build();
 	return ResponseEntity.noContent()
