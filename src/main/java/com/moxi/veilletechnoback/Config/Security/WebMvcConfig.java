@@ -18,9 +18,11 @@ public void addCorsMappings(CorsRegistry corsRegistry){
 			.allowedOrigins(
 					"http://localhost:5173",
 					"http://localhost:4173",
-					"http://veille.localhost"
+					"http://veille.localhost",
+					"https://veille.localhost"
 			)
-			.allowedHeaders("*");
+			.allowedHeaders("*")
+			.exposedHeaders("Set-Cookie");
 }
 }
 

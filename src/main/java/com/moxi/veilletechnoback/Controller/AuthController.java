@@ -34,9 +34,10 @@ public ResponseEntity<Void> login(@RequestBody LoginDTO cred) {
 	AccessTokenResponse tok = keycloakService.login(cred.getUsername(), cred.getPassword());
 	jwtDecoder.decode(tok.getToken());
 	ResponseCookie cookie = ResponseCookie.from("KEYCLOAK_TOKEN" , tok.getToken())
+	        .domain(".localhost")
 			.httpOnly(true)
-			.sameSite("Lax")
-			.secure(false)
+			.sameSite("None")
+			.secure(true)
 			.path("/")
 			.maxAge(Duration.ofSeconds(tok.getExpiresIn())).build();
 	return ResponseEntity.noContent()

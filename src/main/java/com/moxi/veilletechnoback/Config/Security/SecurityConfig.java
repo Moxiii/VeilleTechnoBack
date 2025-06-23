@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.http.HttpMethod;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -47,13 +47,13 @@ public StrictHttpFirewall httpFirewall() {
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	http
-			.cors()
-			.and()
-			.csrf()
+			.cors(Customizer.withDefaults())
+            .csrf()
 			.disable()
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/auth/**" , "/public/**").permitAll()
+					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+					.requestMatchers("/auth/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.oauth2ResourceServer(oauth -> oauth
