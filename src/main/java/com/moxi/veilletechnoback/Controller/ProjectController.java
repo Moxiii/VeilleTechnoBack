@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import com.moxi.veilletechnoback.DTO.Project.ProjectRes;
 
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -72,6 +75,8 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project newProject = new Project();
 	newProject.setName(projectReq.getProjectName());
+	LocalDate aujourdhui = LocalDate.now();
+	newProject.setCreateAt(aujourdhui);
 	if (projectReq.getProjectName() == null || projectReq.getProjectName().isBlank()) {
 		return ResponseEntity.badRequest().body("Project name is required");
 	}
@@ -112,5 +117,9 @@ public ResponseEntity<?> deleteProject(@PathVariable long id) {
 	Project project = projectService.findByUserAndId(currentUser,id);
 	projectService.delete(project);
 	return new ResponseEntity<>(HttpStatus.OK);
+}
+@GetMapping("/status")
+public List<String> getStatusJson() {
+	return Arrays.stream(Status.values()).map(Enum::name).collect(Collectors.toList());
 }
 }
