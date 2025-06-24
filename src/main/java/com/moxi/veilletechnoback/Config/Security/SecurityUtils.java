@@ -19,7 +19,7 @@ public User getCurrentUser() {
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
 		Jwt jwt = (Jwt) authentication.getPrincipal();
-		return userService.findById(jwt.getSubject()).orElse(null);
+		return userService.findById(jwt.getSubject()).orElseThrow(()->new RuntimeException("User not found"));
 
 	}
 	return null;

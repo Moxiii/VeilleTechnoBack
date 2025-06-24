@@ -15,11 +15,7 @@ private UserRepository userRepository;
 
 
 public Optional<User> findById(String id){
-	User existingUser = userRepository.findById(id).orElse(null);
-	if(existingUser !=null){
-		return Optional.of(existingUser);
-	}
-	else return null;
+	return userRepository.findById(id);
 }
 
 public User saveUser(User user) {
