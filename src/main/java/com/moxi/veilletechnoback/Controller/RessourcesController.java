@@ -4,6 +4,7 @@ import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesReq;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesRes;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
+import com.moxi.veilletechnoback.Enum.Ressources.labelName;
 import com.moxi.veilletechnoback.Ressources.Ressources;
 import com.moxi.veilletechnoback.Ressources.RessourcesService;
 import com.moxi.veilletechnoback.Technology.Technology;
@@ -15,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/ressources")
 public class RessourcesController {
@@ -85,5 +88,9 @@ public ResponseEntity<?> deleteRessources(@PathVariable long id) {
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	ressourcesService.delete(ressources);
 	return new ResponseEntity<>(HttpStatus.OK);
+}
+@GetMapping("/label")
+public List<String> getLabelName(){
+	return Arrays.stream(labelName.values()).map(Enum::name).collect(Collectors.toList());
 }
 }
