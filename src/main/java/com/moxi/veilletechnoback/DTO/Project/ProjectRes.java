@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ProjectRes {
+private long id;
 private String name;
 private Status status;
 private List<BasicTechnologyRes> technology;

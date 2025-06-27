@@ -38,6 +38,7 @@ private SecurityUtils securityUtils;
 
 private ProjectRes toRes(Project project) {
 	ProjectRes res = new ProjectRes();
+	res.setId(project.getId());
 	res.setName(project.getName());
 	res.setStatus(project.getStatus());
 	List< BasicTechnologyRes> technologyName = Optional.ofNullable(project.getTechnology())
