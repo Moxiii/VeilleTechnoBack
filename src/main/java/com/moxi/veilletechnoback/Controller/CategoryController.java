@@ -48,4 +48,8 @@ public ResponseEntity<?> deleteCategory(@PathVariable long id)  {
 	categoryService.deleteCategoryById(id , currentUser);
 	return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 }
+@GetMapping("/name")
+public List<String> getAllCategoriesName(){
+	return Arrays.stream(CategoryEnum.values()).map(Enum::name).toList();
+}
 }
