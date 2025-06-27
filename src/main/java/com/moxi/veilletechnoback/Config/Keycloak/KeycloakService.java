@@ -42,6 +42,15 @@ public AccessTokenResponse login(String username, String password) {
 }
 
 public String createUser(RegisterDTO dto){
+	List<UserRepresentation> existingUsers = adminKc
+			.realm("VeilleRealm")
+			.users()
+			.search(dto.getUsername(), true);
+
+	if (!existingUsers.isEmpty()) {
+		throw new RuntimeException("L'utilisateur existe déjà");
+	}
+
 	UserRepresentation rep = new UserRepresentation();
 	rep.setUsername(dto.getUsername());
 	rep.setEmail(dto.getEmail());
