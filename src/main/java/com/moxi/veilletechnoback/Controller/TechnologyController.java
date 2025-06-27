@@ -36,7 +36,9 @@ private SecurityUtils securityUtils;
 private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
 	res.setName(technology.getName());
-	res.setId(technology.getId());
+		if (technology.getId() != null){
+    		res.setId(technology.getId());
+    	}
 	CatwithSub catDTO = new CatwithSub();
 	catDTO.setType(technology.getCategory());
 	List<SubCategory> subCats = subCategoryService.findByCategoryEnum(technology.getCategory());
