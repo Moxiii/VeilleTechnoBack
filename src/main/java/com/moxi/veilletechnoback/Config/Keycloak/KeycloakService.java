@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+
+
 
 
 
@@ -69,7 +72,12 @@ public String createUser(RegisterDTO dto){
 		throw new RuntimeException("Erreur KC : " + r.getStatus());
 	}
 	String location = r.getHeaderString("Location");
-	return location.substring(location.lastIndexOf('/') + 1);
+	String userId = location.substring(location.lastIndexOf('/') + 1);
+	UserRepresentation createdUser = adminKc.realm("VeilleRealm").users().get(userId).toRepresentation();
+	createdUser.setEnabled(true);
+	createdUser.setEmailVerified(true);
+	createdUser.setRequiredActions(Collections.emptyList());
+	return userId;
 }
 
 }
