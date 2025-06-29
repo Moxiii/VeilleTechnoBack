@@ -24,19 +24,20 @@ public Technology findByUserAndId(User user , long id) {
 	return technologyRepository.findByUserAndId(user,id);
 }
 
-public Technology create(String name , CategoryEnum category, User user ) {
+public Technology create(String name , CategoryEnum category, List<SubCategory> subCategories ,User user) {
 	Technology technology = new Technology();
 	technology.setName(name);
 	technology.setUser(user);
 	technology.setCreateAt(LocalDate.now());
 	technology.setCategory(category);
+	technology.setSubCategory(subCategories);
 	technologyRepository.save(technology);
 	return technology;
 }
-public void update(Technology tech, String name, CategoryEnum category, SubCategory subCategory) {
+public void update(Technology tech, String name, CategoryEnum category, List<SubCategory> subCategories) {
 	if (name != null) tech.setName(name);
 	if (category != null) tech.setCategory(category);
-	if (subCategory != null) tech.setSubCategory(subCategory);
+	if (subCategories != null && !subCategories.isEmpty()) tech.setSubCategory(subCategories);
 
 	technologyRepository.save(tech);
 }

@@ -76,18 +76,22 @@ public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
 @PostMapping
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 	User currentUser = securityUtils.getCurrentUser();
-	Technology createdTech = technologyService.create(technology.getName() , technology.getCategory() , currentUser);
+	Technology createdTech = technologyService.create(technology.getName() , technology.getCategory() , technology.getSubCategory(), currentUser);
 	return new ResponseEntity<>(techToRes(createdTech), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
 	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
-	SubCategory subCategory = null;
-	if(updateTechnology.getSubCategoryId() != null){
-		subCategory = subCategoryService.findById(updateTechnology.getSubCategoryId());
+	List<SubCategory> subCategories = new ArrayList<>();
+	if(updateTechnology.getSubCategoryId() != null && !updateTechnology.getSubCategoryId().isEmpty()){
+		subCategories = updateTechnology
+				.getSubCategoryId()
+				.stream()
+				.map(subCategoryService::findById)
+				.toList();
 	}
-	technologyService.update(technology , updateTechnology.getName(), updateTechnology.getCategory() , subCategory);
+	technologyService.update(technology , updateTechnology.getName(), updateTechnology.getCategory() , subCategories);
 	return new ResponseEntity<>(techToRes(technology), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")

@@ -12,6 +12,7 @@ import lombok.Setter;
 import com.moxi.veilletechnoback.Ressources.Ressources;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,6 +37,6 @@ private List<Project> projects;
 @OneToMany(mappedBy = "technology", cascade = CascadeType.ALL)
 private List<Ressources> resources;
 private CategoryEnum category;
-@ManyToOne
-private SubCategory subCategory;
+@ManyToMany
+private List<SubCategory> subCategory = new ArrayList<>();
 }
