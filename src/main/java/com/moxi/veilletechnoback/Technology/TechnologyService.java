@@ -24,12 +24,14 @@ public Technology findByUserAndId(User user , long id) {
 	return technologyRepository.findByUserAndId(user,id);
 }
 
-public void create(String name , CategoryEnum category, User user ) {
+public Technology create(String name , CategoryEnum category, User user ) {
 	Technology technology = new Technology();
 	technology.setName(name);
 	technology.setUser(user);
 	technology.setCreateAt(LocalDate.now());
+	technology.setCategory(category);
 	technologyRepository.save(technology);
+	return technology;
 }
 public void update(Technology tech, String name, CategoryEnum category, SubCategory subCategory) {
 	if (name != null) tech.setName(name);

@@ -76,12 +76,8 @@ public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
 @PostMapping
 public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
 	User currentUser = securityUtils.getCurrentUser();
-	Technology newTechnology = new Technology();
-	newTechnology.setName(technology.getName());
-	newTechnology.setCategory(technology.getCategory());
-	newTechnology.setUser(currentUser);
-	technologyService.create(technology.getName() , technology.getCategory() , currentUser);
-	return new ResponseEntity<>(techToRes(newTechnology), HttpStatus.CREATED);
+	Technology createdTech = technologyService.create(technology.getName() , technology.getCategory() , currentUser);
+	return new ResponseEntity<>(techToRes(createdTech), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
