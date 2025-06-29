@@ -19,10 +19,7 @@ import com.moxi.veilletechnoback.DTO.Project.ProjectRes;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -88,7 +85,8 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 	newProject.setUser(currentUser);
 	if (projectReq.getTechnology() != null) {
 		List<Technology> technologies = projectReq.getTechnology().stream()
-				.map(techRes -> technologyService.findByUserAndId(currentUser,techRes.getId()))
+				.map(id -> technologyService.findByUserAndId(currentUser,id))
+				.filter(Objects::nonNull)
 				.toList();
 
 		newProject.setTechnology(technologies);

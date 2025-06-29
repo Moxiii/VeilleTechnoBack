@@ -14,7 +14,7 @@ public class ProjectReq {
 private long id;
 private String projectName;
 private Status status;
-private List<TechnologyRes> technology;
+private List<Long> technology;
 private LocalDate startDate;
 private LocalDate endDate;
 private List<String> links;
