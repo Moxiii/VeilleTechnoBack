@@ -11,6 +11,7 @@ import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
 import com.moxi.veilletechnoback.Project.Project;
+import com.moxi.veilletechnoback.Project.ProjectService;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 
@@ -32,6 +33,8 @@ private TechnologyService technologyService;
 private SubCategoryService subCategoryService;
 @Autowired
 private SecurityUtils securityUtils;
+@Autowired
+private ProjectService projectService;
 
 private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
@@ -98,6 +101,13 @@ public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody Te
 public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
+	List<Project> projects = projectService.findByuser(currentUser);
+	for(Project project : projects){
+		if(project.getTechnology().contains(technology)){
+			project.getTechnology().remove(technology);
+			projectService.save(project);
+		}
+	}
 	technologyService.delete(technology);
 	return new ResponseEntity<>(HttpStatus.OK);
 }
