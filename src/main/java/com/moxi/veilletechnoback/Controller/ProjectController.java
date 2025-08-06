@@ -107,6 +107,7 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 			: project.getTechnology();
 
 	project.setTechnology(technologies);
+	project.setStatus(updateProject.getStatus() != null ? updateProject.getStatus() : project.getStatus());
 	projectService.save(project);
 	return new ResponseEntity<>(toRes(project), HttpStatus.OK);
 }
