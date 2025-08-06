@@ -43,7 +43,9 @@ private ProjectRes toRes(Project project) {
 			.stream()
 			.map(tech ->{
 				BasicTechnologyRes technologyRes = new BasicTechnologyRes();
+				technologyRes.setId(tech.getId());
 				technologyRes.setName(tech.getName());
+
 				return technologyRes;
 	}).toList();
 	res.setTechnology(technologyName);
