@@ -34,6 +34,7 @@ private SecurityUtils securityUtils;
 
 private RessourcesRes toRes(Ressources ressources) {
 	RessourcesRes res = new RessourcesRes();
+	res.setId(ressources.getId());
 	res.setLabel(ressources.getLabel());
 	res.setUrl(ressources.getUrl());
 	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
