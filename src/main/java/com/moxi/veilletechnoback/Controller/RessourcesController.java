@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ private RessourcesRes toRes(Ressources ressources) {
 	res.setLabel(ressources.getLabel());
 	res.setUrl(ressources.getUrl());
 	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
+	basicTechnologyRes.setId(ressources.getTechnology().getId());
 	basicTechnologyRes.setName(ressources.getTechnology().getName());
 	res.setTechnology(basicTechnologyRes);
 	res.setCreateAt(ressources.getCreateAt());
@@ -60,6 +62,7 @@ public ResponseEntity<?> getRessourcesById(@PathVariable long id) {
 @PostMapping
 public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources) {
 	Ressources newRessources = new Ressources();
+	LocalDate aujourdhui = LocalDate.now();
 	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser, ressources.getTechnologyId());
 	log.warn("Requested technologyId:" + ressources.getTechnologyId());
@@ -71,6 +74,7 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	newRessources.setLabel(ressources.getLabel());
 	newRessources.setUrl(ressources.getUrl());
 	newRessources.setUser(currentUser);
+	newRessources.setCreateAt(aujourdhui);
 	ressourcesService.save(newRessources);
 	return new ResponseEntity<>(toRes(newRessources), HttpStatus.CREATED);
 }
