@@ -10,6 +10,7 @@ import com.moxi.veilletechnoback.Ressources.RessourcesService;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 import com.moxi.veilletechnoback.User.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 @RestController
 @RequestMapping("/ressources")
 public class RessourcesController {
@@ -61,6 +62,8 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	Ressources newRessources = new Ressources();
 	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser, ressources.getTechnologyId());
+	log.warn("Requested technologyId:" + ressources.getTechnologyId());
+	log.warn("Tech found:" + tech);
 	if(tech == null) {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
