@@ -20,6 +20,7 @@ private User user;
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private String url;
+private String name = "";
 private labelName label;
 private LocalDate createAt;
 private String description;

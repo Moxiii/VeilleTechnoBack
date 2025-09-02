@@ -37,6 +37,7 @@ private RessourcesRes toRes(Ressources ressources) {
 	res.setId(ressources.getId());
 	res.setLabel(ressources.getLabel());
 	res.setUrl(ressources.getUrl());
+	res.setName(ressources.getName());
 	BasicTechnologyRes basicTechnologyRes = new BasicTechnologyRes();
 	basicTechnologyRes.setId(ressources.getTechnology().getId());
 	basicTechnologyRes.setName(ressources.getTechnology().getName());
@@ -66,11 +67,10 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	LocalDate aujourdhui = LocalDate.now();
 	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser, ressources.getTechnologyId());
-	log.warn("Requested technologyId:" + ressources.getTechnologyId());
-	log.warn("Tech found:" + tech);
 	if(tech == null) {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+	newRessources.setName(ressources.getName());
 	newRessources.setTechnology(tech);
 	newRessources.setLabel(ressources.getLabel());
 	newRessources.setUrl(ressources.getUrl());
@@ -85,6 +85,7 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 	Technology tech = technologyService.findByUserAndId(currentUser,updateRessources.getTechnologyId());
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	ressources.setLabel(updateRessources.getLabel() != null ? updateRessources.getLabel() : ressources.getLabel());
+	ressources.setName(updateRessources.getName() != null ? updateRessources.getName() : ressources.getName());
 	ressources.setTechnology(tech != null ? tech : ressources.getTechnology());
 	ressources.setUrl(updateRessources.getUrl() != null ? updateRessources.getUrl() : ressources.getUrl());
 	ressourcesService.save(ressources);

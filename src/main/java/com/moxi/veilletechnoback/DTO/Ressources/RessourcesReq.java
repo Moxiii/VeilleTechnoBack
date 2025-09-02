@@ -13,6 +13,7 @@ import lombok.Setter;
 public class RessourcesReq {
 private long id;
 private long technologyId;
+private String name;
 private labelName label;
 private String url;
 }

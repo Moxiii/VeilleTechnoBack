@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 public class RessourcesRes {
 private long id;
+private String name;
 private BasicTechnologyRes technology;
 private LocalDate createAt;
 private labelName label;
