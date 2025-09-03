@@ -17,7 +17,7 @@ private long id;
 private String name;
 private Status status;
 private List<BasicTechnologyRes> technology;
-private LocalDate createdDate;
+private LocalDate createdAt;
 private LocalDate startDate;
 private LocalDate endDate;
 private List<String> links;

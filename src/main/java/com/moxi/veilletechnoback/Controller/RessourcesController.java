@@ -42,7 +42,7 @@ private RessourcesRes toRes(Ressources ressources) {
 	basicTechnologyRes.setId(ressources.getTechnology().getId());
 	basicTechnologyRes.setName(ressources.getTechnology().getName());
 	res.setTechnology(basicTechnologyRes);
-	res.setCreateAt(ressources.getCreatedAt());
+	res.setCreatedAt(ressources.getCreatedAt());
 	res.setDescription(ressources.getDescription());
 	return res;
 }

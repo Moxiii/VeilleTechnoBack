@@ -17,7 +17,7 @@ import java.util.List;
 public class TechnologyRes {
 private long id;
 private String name;
-private LocalDate createAt;
+private LocalDate createdAt;
 private CatwithSub category;
 private List<BasicProjectRes> projects = new ArrayList<>();
 private Duration trainingTime;
