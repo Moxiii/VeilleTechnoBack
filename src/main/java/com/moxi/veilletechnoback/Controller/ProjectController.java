@@ -76,7 +76,7 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 	Project newProject = new Project();
 	newProject.setName(projectReq.getProjectName());
 	LocalDate aujourdhui = LocalDate.now();
-	newProject.setCreateAt(aujourdhui);
+	newProject.setCreatedAt(aujourdhui);
 	if (projectReq.getProjectName() == null || projectReq.getProjectName().isBlank()) {
 		return ResponseEntity.badRequest().body("Project name is required");
 	}

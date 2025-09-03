@@ -56,7 +56,7 @@ private TechnologyRes techToRes(Technology technology) {
 			basicProjects.add(basic);
 		}
 	}
-	res.setCreateAt(technology.getCreateAt());
+	res.setCreateAt(technology.getCreatedAt());
 	res.setProjects(basicProjects);
 	res.setTrainingTime(technology.getTrainingTime());
 	return res;
