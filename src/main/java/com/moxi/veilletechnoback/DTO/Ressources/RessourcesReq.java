@@ -16,4 +16,5 @@ private long technologyId;
 private String name;
 private labelName label;
 private String url;
+private String description;
 }

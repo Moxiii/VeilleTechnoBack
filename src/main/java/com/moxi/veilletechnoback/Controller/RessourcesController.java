@@ -76,6 +76,7 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	newRessources.setUrl(ressources.getUrl());
 	newRessources.setUser(currentUser);
 	newRessources.setCreatedAt(aujourdhui);
+	newRessources.setDescription(ressources.getDescription());
 	ressourcesService.save(newRessources);
 	return new ResponseEntity<>(toRes(newRessources), HttpStatus.CREATED);
 }
@@ -88,6 +89,7 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 	ressources.setName(updateRessources.getName() != null ? updateRessources.getName() : ressources.getName());
 	ressources.setTechnology(tech != null ? tech : ressources.getTechnology());
 	ressources.setUrl(updateRessources.getUrl() != null ? updateRessources.getUrl() : ressources.getUrl());
+	ressources.setDescription(updateRessources.getDescription() != null ? updateRessources.getDescription() : ressources.getDescription());
 	ressourcesService.save(ressources);
 	return new ResponseEntity<>(toRes(ressources), HttpStatus.OK);
 }
