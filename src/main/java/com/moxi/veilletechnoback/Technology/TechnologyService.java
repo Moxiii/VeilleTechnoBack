@@ -28,7 +28,7 @@ public Technology create(String name , CategoryEnum category, List<SubCategory> 
 	Technology technology = new Technology();
 	technology.setName(name);
 	technology.setUser(user);
-	technology.setCreateAt(LocalDate.now());
+	technology.setCreatedAt(LocalDate.now());
 	technology.setCategory(category);
 	technology.setSubCategory(subCategories);
 	technologyRepository.save(technology);
