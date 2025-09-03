@@ -30,7 +30,7 @@ private Long id;
 @ManyToOne
 private User user;
 private String name;
-private LocalDate createAt;
+private LocalDate createdAt;
 private Duration trainingTime = Duration.ZERO;
 @ManyToMany(mappedBy = "technology")
 private List<Project> projects;

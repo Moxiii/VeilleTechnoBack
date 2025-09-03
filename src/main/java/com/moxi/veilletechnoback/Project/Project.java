@@ -27,7 +27,7 @@ private Long id;
 @JsonBackReference
 private User user;
 private String name;
-private LocalDate createAt;
+private LocalDate createdAt;
 private LocalDate startDate;
 private LocalDate endDate;
 private Status status;
