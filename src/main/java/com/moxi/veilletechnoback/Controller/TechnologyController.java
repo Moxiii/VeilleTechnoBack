@@ -47,7 +47,20 @@ private TechnologyRes techToRes(Technology technology) {
     		res.setId(technology.getId());
     	}
 	CatwithSub catDTO = new CatwithSub();
-	catDTO.setType(technology.getCategory());
+	if (technology.getCategory() != null) {
+		// Cas 1 : catégorie de base (enum) sans custom
+		if (technology.getCategory().getId() != 0 && (technology.getCategory().getName() == null || technology.getCategory().getName().isEmpty())) {
+			catDTO.setDefaultType(technology.getCategory().getType());
+		}
+		// Cas 2 : catégorie custom avec un nom donné par l’utilisateur
+		else if (technology.getCategory().getName() != null && !technology.getCategory().getName().isEmpty()) {
+			catDTO.setCustomCategoryName(technology.getCategory().getName());
+			catDTO.setDefaultType(technology.getCategory().getType()); // optionnel si tu veux garder le type de base associé
+		}
+		// Cas 3 : catégorie custom avec juste un type défini (ex: type créé par l’utilisateur sans nom précis)
+		else {
+			catDTO.setCustomCategoryType(String.valueOf(technology.getCategory().getType()));
+	}}
 	List<SubCategory> subCats = subCategoryService.findByCategory(technology.getCategory());
 	List<SubCategoryRes> subCatDTO = subCats.stream().map(sub -> new SubCategoryRes(sub.getName())).toList();
 	catDTO.setSubCategories(subCatDTO);
