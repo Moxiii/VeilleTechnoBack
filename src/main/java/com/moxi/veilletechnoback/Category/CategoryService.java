@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Category;
 import com.moxi.veilletechnoback.User.User;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,13 @@ public List<Category> findByUser(User user){
 	return categoryRepository.findByUser(user);
 }
 
-public void createCustomCategory(User user, String name, CategoryEnum type) {
+public Category createCustomCategory( String name, CategoryEnum type , User user) {
 	Category category = new Category();
 	category.setUser(user);
 	category.setName(name);
 	category.setType(type);
-	categoryRepository.save(category);
+	return categoryRepository.save(category);
+
 }
 
 public void deleteCategoryById(long id, User user)  {
@@ -29,6 +31,11 @@ public void deleteCategoryById(long id, User user)  {
 		throw new AccessDeniedException("Not your category");
 	}
 	categoryRepository.delete(category);
+}
+
+public Category findById(Long categoryId) {
+	Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Not found"));;
+	return category;
 }
 }
 

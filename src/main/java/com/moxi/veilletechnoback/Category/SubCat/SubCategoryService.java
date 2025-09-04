@@ -45,5 +45,9 @@ public SubCategory findById(Long subCategoryId) {
 public List<SubCategory> findByCategoryEnum(CategoryEnum category) {
 	return subCategoryRepository.findByCategory_Type(category);
 }
+
+public List<SubCategory> findByCategory(Category category) {
+	return subCategoryRepository.findByCategory(category);
+}
 }
 

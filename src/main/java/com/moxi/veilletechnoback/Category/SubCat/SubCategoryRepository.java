@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Category.SubCat;
 
+import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.CategoryEnum;
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> 
 List<SubCategory> findByUser(User user);
 
 List<SubCategory> findByCategory_Type(CategoryEnum category);
+List<SubCategory> findByCategory(Category category);
 }

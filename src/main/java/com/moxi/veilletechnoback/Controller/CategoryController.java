@@ -39,7 +39,7 @@ public ResponseEntity<Map<String,Object>> getAllCategories() {
 @PostMapping
 public ResponseEntity<?> addCategory(@RequestBody CategoryReq category) {
 	User currentUser = securityUtils.getCurrentUser();
-	categoryService.createCustomCategory(currentUser , category.getName() , category.getType());
+	categoryService.createCustomCategory( category.getName() , category.getType() , currentUser);
 	return ResponseEntity.status(HttpStatus.CREATED).build();
 }
 @DeleteMapping("/{id}")

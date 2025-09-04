@@ -1,6 +1,8 @@
 package com.moxi.veilletechnoback.Controller;
 
 
+import com.moxi.veilletechnoback.Category.Category;
+import com.moxi.veilletechnoback.Category.CategoryService;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
 
@@ -30,6 +32,8 @@ public class TechnologyController {
 @Autowired
 private TechnologyService technologyService;
 @Autowired
+private CategoryService categoryService;
+@Autowired
 private SubCategoryService subCategoryService;
 @Autowired
 private SecurityUtils securityUtils;
@@ -44,7 +48,7 @@ private TechnologyRes techToRes(Technology technology) {
     	}
 	CatwithSub catDTO = new CatwithSub();
 	catDTO.setType(technology.getCategory());
-	List<SubCategory> subCats = subCategoryService.findByCategoryEnum(technology.getCategory());
+	List<SubCategory> subCats = subCategoryService.findByCategory(technology.getCategory());
 	List<SubCategoryRes> subCatDTO = subCats.stream().map(sub -> new SubCategoryRes(sub.getName())).toList();
 	catDTO.setSubCategories(subCatDTO);
 	res.setCategory(catDTO);
@@ -77,24 +81,25 @@ public ResponseEntity<?> getTechnologyById(@PathVariable long id) {
 	return new ResponseEntity<>(techToRes(technology) , HttpStatus.OK);
 }
 @PostMapping
-public ResponseEntity<?> createTechnology(@RequestBody Technology technology) {
+public ResponseEntity<?> createTechnology(@RequestBody TechnologyReq technology) {
 	User currentUser = securityUtils.getCurrentUser();
-	Technology createdTech = technologyService.create(technology.getName() , technology.getCategory() , technology.getSubCategory(), currentUser);
+	Technology createdTech = technologyService.create(technology, currentUser);
 	return new ResponseEntity<>(techToRes(createdTech), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
 public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody TechnologyReq updateTechnology) {
 	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
+	Category category = categoryService.findById(updateTechnology.getCategoryId());
 	List<SubCategory> subCategories = new ArrayList<>();
-	if(updateTechnology.getSubCategoryId() != null && !updateTechnology.getSubCategoryId().isEmpty()){
+	if(updateTechnology.getSubCategoryIds() != null && !updateTechnology.getSubCategoryIds().isEmpty()){
 		subCategories = updateTechnology
-				.getSubCategoryId()
+				.getSubCategoryIds()
 				.stream()
 				.map(subCategoryService::findById)
 				.toList();
 	}
-	technologyService.update(technology , updateTechnology.getName(), updateTechnology.getCategory() , subCategories);
+	technologyService.update(technology , updateTechnology.getName(), category , subCategories);
 	return new ResponseEntity<>(techToRes(technology), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")

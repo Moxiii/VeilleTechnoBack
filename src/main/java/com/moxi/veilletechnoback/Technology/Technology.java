@@ -2,7 +2,7 @@ package com.moxi.veilletechnoback.Technology;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.moxi.veilletechnoback.Category.CategoryEnum;
+import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.User.User;
@@ -36,7 +36,15 @@ private Duration trainingTime = Duration.ZERO;
 private List<Project> projects;
 @OneToMany(mappedBy = "technology", cascade = CascadeType.ALL)
 private List<Ressources> resources;
-private CategoryEnum category;
+@ManyToOne
+private Category category;
 @ManyToMany
 private List<SubCategory> subCategory = new ArrayList<>();
+@ManyToMany
+@JoinTable(
+		name="technology_links",
+		joinColumns = @JoinColumn(name="technology_id"),
+		inverseJoinColumns =  @JoinColumn(name="linked_technology_id")
+)
+private List<Technology> linkedTechnologies = new ArrayList<>();
 }
