@@ -12,4 +12,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 List<Category> findByUser(User user);
 
 void deleteByIdAndUser(long id, User user);
+
+boolean existsByTypeAndIsDefault(CategoryEnum type, boolean b);
+
+List<Category> findByIsDefault(boolean b);
 }

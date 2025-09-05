@@ -54,8 +54,8 @@ public Technology create(TechnologyReq req, User user) {
 		List<Technology> linked = technologyRepository.findAllById(req.getLinkedTechnologyIds());
 		technology.setLinkedTechnologies(linked);
 	}
-	technologyRepository.save(technology);
-	return technology;
+
+	return technologyRepository.save(technology);
 }
 public void update(Technology tech, String name, Category category, List<SubCategory> subCategories) {
 	if (name != null) tech.setName(name);

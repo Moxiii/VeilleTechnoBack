@@ -16,6 +16,7 @@ public class Category {
 @GeneratedValue
 @Id
 private long id;
+private boolean defaultCategory;
 @ManyToOne
 private User user;
 private String name;

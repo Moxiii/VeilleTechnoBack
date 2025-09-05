@@ -11,8 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class CatwithSub {
-private CategoryEnum defaultType;
+private CategoryEnum type;
 private List<SubCategoryRes> subCategories;
-private String customCategoryName;
-private String customCategoryType;
+@Setter
+private boolean defaultCategory;
+private String name;
 }

@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Controller;
 
+import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.CategoryEnum;
 import com.moxi.veilletechnoback.Category.CategoryService;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
@@ -11,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/category")
@@ -25,15 +23,16 @@ private CategoryService categoryService;
 private SecurityUtils securityUtils;
 
 @GetMapping
-public ResponseEntity<Map<String,Object>> getAllCategories() {
+public ResponseEntity<List<CategoryRes>> getAllCategories() {
 	User currentUser = securityUtils.getCurrentUser();
-	List<String> defaultCategory = Arrays.stream(CategoryEnum.values()).map(Enum::name).toList();
-	List<CategoryRes> customCategory = categoryService.findByUser(currentUser).stream()
-			.map(c -> new CategoryRes(c.getName(), c.getType().toString()))
-			.toList();
-	Map<String,Object> response = new HashMap<>();
-	response.put("default", defaultCategory);
-	response.put("custom", customCategory);
+	List<Category> categories = categoryService.findAll(currentUser);
+	List<CategoryRes> response = categories.stream().map(
+			c -> new CategoryRes(
+					c.getName(),
+					c.getType().toString(),
+					c.isDefaultCategory()
+			)
+	).toList();
 	return ResponseEntity.ok(response);
 }
 @PostMapping

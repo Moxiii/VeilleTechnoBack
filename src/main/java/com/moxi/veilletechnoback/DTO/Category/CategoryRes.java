@@ -9,4 +9,5 @@ import lombok.Setter;
 public class CategoryRes {
 private String name;
 private String type;
+private boolean defaultCategory;
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,6 +37,23 @@ public void deleteCategoryById(long id, User user)  {
 public Category findById(Long categoryId) {
 	Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Not found"));;
 	return category;
+}
+public List<Category> findAll(User user) {
+	for (CategoryEnum type : CategoryEnum.values()) {
+		if(!categoryRepository.existsByTypeAndIsDefault(type,true)){
+			Category defaultCategory = new Category();
+			defaultCategory.setDefaultCategory(true);
+			defaultCategory.setType(type);
+			defaultCategory.setUser(null);
+			categoryRepository.save(defaultCategory);
+		}
+	}
+	List<Category> defaults = categoryRepository.findByIsDefault(true);
+	List<Category> customs = categoryRepository.findByUser(user);
+	List<Category> categories = new ArrayList<>();
+	categories.addAll(defaults);
+	categories.addAll(customs);
+	return categories;
 }
 }
 
