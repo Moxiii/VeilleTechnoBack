@@ -28,6 +28,7 @@ public ResponseEntity<List<CategoryRes>> getAllCategories() {
 	List<Category> categories = categoryService.findAll(currentUser);
 	List<CategoryRes> response = categories.stream().map(
 			c -> new CategoryRes(
+					c.getId(),
 					c.getName(),
 					c.getType().toString(),
 					c.isDefaultCategory()
