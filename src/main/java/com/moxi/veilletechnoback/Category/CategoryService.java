@@ -40,7 +40,7 @@ public Category findById(Long categoryId) {
 }
 public List<Category> findAll(User user) {
 	for (CategoryEnum type : CategoryEnum.values()) {
-		if(!categoryRepository.existsByTypeAndIsDefault(type,true)){
+		if(!categoryRepository.existsByTypeAndDefaultCategory(type,true)){
 			Category defaultCategory = new Category();
 			defaultCategory.setDefaultCategory(true);
 			defaultCategory.setType(type);
@@ -48,7 +48,7 @@ public List<Category> findAll(User user) {
 			categoryRepository.save(defaultCategory);
 		}
 	}
-	List<Category> defaults = categoryRepository.findByIsDefault(true);
+	List<Category> defaults = categoryRepository.findByDefaultCategory(true);
 	List<Category> customs = categoryRepository.findByUser(user);
 	List<Category> categories = new ArrayList<>();
 	categories.addAll(defaults);

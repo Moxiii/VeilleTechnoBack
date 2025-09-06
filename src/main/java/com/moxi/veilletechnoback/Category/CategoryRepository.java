@@ -13,7 +13,7 @@ List<Category> findByUser(User user);
 
 void deleteByIdAndUser(long id, User user);
 
-boolean existsByTypeAndIsDefault(CategoryEnum type, boolean b);
+boolean existsByTypeAndDefaultCategory(CategoryEnum type, boolean b);
 
-List<Category> findByIsDefault(boolean b);
+List<Category> findByDefaultCategory(boolean b);
 }
