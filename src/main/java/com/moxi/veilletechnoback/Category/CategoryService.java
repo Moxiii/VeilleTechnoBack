@@ -21,6 +21,7 @@ public Category createCustomCategory( String name, CategoryEnum type , User user
 	category.setUser(user);
 	category.setName(name);
 	category.setType(type);
+	category.setDefaultCategory(false);
 	return categoryRepository.save(category);
 
 }
