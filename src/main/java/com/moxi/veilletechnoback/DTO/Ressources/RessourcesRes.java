@@ -25,8 +25,7 @@ private String url;
 private String description;
 @ElementCollection
 private Set<String> tags = new HashSet<>();
-private String type;
 private LocalDate updatedAt;
 private Long categoryId;
-private CategoryEnum categoryType;
+private CategoryEnum type;
 }

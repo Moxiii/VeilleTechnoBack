@@ -50,11 +50,10 @@ private RessourcesRes toRes(Ressources ressources) {
 	res.setCreatedAt(ressources.getCreatedAt());
 	res.setDescription(ressources.getDescription());
 	res.setTags(ressources.getTags());
-	res.setType(ressources.getType());
 	res.setUpdatedAt(ressources.getUpdatedAt());
 	if (ressources.getCategory() != null) {
 		res.setCategoryId(ressources.getCategory().getId());
-		res.setCategoryType(ressources.getCategory().getType());
+		res.setType(ressources.getCategory().getType());
 	}
 	return res;
 }
@@ -92,7 +91,6 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	newRessources.setCreatedAt(aujourdhui);
 	newRessources.setDescription(ressources.getDescription());
 	newRessources.setTags(ressources.getTags() != null ? ressources.getTags() : new HashSet<>());
-	newRessources.setType(ressources.getType());
 	newRessources.setUpdatedAt(aujourdhui);
 
 	ressourcesService.save(newRessources);
@@ -110,7 +108,6 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 	ressources.setUrl(updateRessources.getUrl() != null ? updateRessources.getUrl() : ressources.getUrl());
 	ressources.setDescription(updateRessources.getDescription() != null ? updateRessources.getDescription() : ressources.getDescription());
 	ressources.setTags(updateRessources.getTags() != null ? updateRessources.getTags() : ressources.getTags());
-	ressources.setType(updateRessources.getType() != null ? updateRessources.getType() : ressources.getType());
 	ressources.setCategory(category != null ? category : ressources.getCategory());
 	ressources.setUpdatedAt(LocalDate.now());
 	ressourcesService.save(ressources);

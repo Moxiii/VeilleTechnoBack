@@ -32,7 +32,6 @@ private String description;
 private Technology technology;
 @ElementCollection
 private Set<String> tags = new HashSet<>();
-private String type = "";
 private LocalDate updatedAt;
 @ManyToOne
 @JoinColumn(name="category_id")
