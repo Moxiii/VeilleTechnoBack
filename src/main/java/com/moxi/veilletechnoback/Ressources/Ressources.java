@@ -1,5 +1,6 @@
 package com.moxi.veilletechnoback.Ressources;
 
+import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Enum.Ressources.labelName;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.User.User;
@@ -8,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -27,4 +30,11 @@ private String description;
 @ManyToOne
 @JoinColumn(name = "technology_id")
 private Technology technology;
+@ElementCollection
+private Set<String> tags = new HashSet<>();
+private String type = "";
+private LocalDate updatedAt;
+@ManyToOne
+@JoinColumn(name="category_id")
+private Category category;
 }

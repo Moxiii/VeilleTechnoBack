@@ -1,5 +1,7 @@
 package com.moxi.veilletechnoback.Controller;
 
+import com.moxi.veilletechnoback.Category.Category;
+import com.moxi.veilletechnoback.Category.CategoryService;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesReq;
 import com.moxi.veilletechnoback.DTO.Ressources.RessourcesRes;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 @Slf4j
@@ -31,6 +34,8 @@ private RessourcesService ressourcesService;
 private TechnologyService technologyService;
 @Autowired
 private SecurityUtils securityUtils;
+@Autowired
+private CategoryService categoryService;
 
 private RessourcesRes toRes(Ressources ressources) {
 	RessourcesRes res = new RessourcesRes();
@@ -44,6 +49,13 @@ private RessourcesRes toRes(Ressources ressources) {
 	res.setTechnology(basicTechnologyRes);
 	res.setCreatedAt(ressources.getCreatedAt());
 	res.setDescription(ressources.getDescription());
+	res.setTags(ressources.getTags());
+	res.setType(ressources.getType());
+	res.setUpdatedAt(ressources.getUpdatedAt());
+	if (ressources.getCategory() != null) {
+		res.setCategoryId(ressources.getCategory().getId());
+		res.setCategoryType(ressources.getCategory().getType());
+	}
 	return res;
 }
 
@@ -67,16 +79,22 @@ public ResponseEntity<?> createRessources(@RequestBody RessourcesReq ressources)
 	LocalDate aujourdhui = LocalDate.now();
 	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser, ressources.getTechnologyId());
-	if(tech == null) {
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	if(tech == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	newRessources.setTechnology(tech);
+	if(ressources.getCategoryId() !=null){
+		Category category = categoryService.findById(ressources.getCategoryId());
+		newRessources.setCategory(category);
 	}
 	newRessources.setName(ressources.getName());
-	newRessources.setTechnology(tech);
 	newRessources.setLabel(ressources.getLabel());
 	newRessources.setUrl(ressources.getUrl());
 	newRessources.setUser(currentUser);
 	newRessources.setCreatedAt(aujourdhui);
 	newRessources.setDescription(ressources.getDescription());
+	newRessources.setTags(ressources.getTags() != null ? ressources.getTags() : new HashSet<>());
+	newRessources.setType(ressources.getType());
+	newRessources.setUpdatedAt(aujourdhui);
+
 	ressourcesService.save(newRessources);
 	return new ResponseEntity<>(toRes(newRessources), HttpStatus.CREATED);
 }
@@ -85,11 +103,16 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 	User currentUser = securityUtils.getCurrentUser();
 	Technology tech = technologyService.findByUserAndId(currentUser,updateRessources.getTechnologyId());
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
+	Category category = categoryService.findById(updateRessources.getCategoryId());
 	ressources.setLabel(updateRessources.getLabel() != null ? updateRessources.getLabel() : ressources.getLabel());
 	ressources.setName(updateRessources.getName() != null ? updateRessources.getName() : ressources.getName());
 	ressources.setTechnology(tech != null ? tech : ressources.getTechnology());
 	ressources.setUrl(updateRessources.getUrl() != null ? updateRessources.getUrl() : ressources.getUrl());
 	ressources.setDescription(updateRessources.getDescription() != null ? updateRessources.getDescription() : ressources.getDescription());
+	ressources.setTags(updateRessources.getTags() != null ? updateRessources.getTags() : ressources.getTags());
+	ressources.setType(updateRessources.getType() != null ? updateRessources.getType() : ressources.getType());
+	ressources.setCategory(category != null ? category : ressources.getCategory());
+	ressources.setUpdatedAt(LocalDate.now());
 	ressourcesService.save(ressources);
 	return new ResponseEntity<>(toRes(ressources), HttpStatus.OK);
 }
