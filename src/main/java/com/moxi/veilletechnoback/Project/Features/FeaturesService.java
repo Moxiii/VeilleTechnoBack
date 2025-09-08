@@ -30,7 +30,7 @@ public Features createFeature(User user,FeaturesReq req  ) {
 	feature.setEndDate(req.getEndDate());
 	return featuresRepository.save(feature);
 }
-public List<FeaturesRes> getFeaturesByProject(User user ,Long projectId) {
+public List<FeaturesRes> getFeaturesByProject(Long projectId) {
 	return featuresRepository.findAllByProjectId( projectId)
 			.stream()
 			.map(f -> new FeaturesRes(f.getId(), f.getName(),f.getDescription(), f.getStartDate(), f.getEndDate()))
