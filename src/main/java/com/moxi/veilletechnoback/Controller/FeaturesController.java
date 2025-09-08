@@ -37,8 +37,7 @@ private FeaturesRes toRes (Features features) {
 
 @GetMapping("project/{projectId}")
 public List<FeaturesRes> getProjectFeatures(@PathVariable Long projectId) {
-	User currentUser = securityUtils.getCurrentUser();
-	return featuresService.getFeaturesByProject(currentUser , projectId);
+	return featuresService.getFeaturesByProject(projectId);
 }
 @PostMapping
 public ResponseEntity<FeaturesRes> addFeatures(@RequestBody FeaturesReq req) {
