@@ -110,7 +110,7 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 
 	project.setTechnology(technologies);
 	project.setStatus(updateProject.getStatus() != null ? updateProject.getStatus() : project.getStatus());
-	projectService.save(project);
+	projectService.update(project);
 	return new ResponseEntity<>(toRes(project), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")

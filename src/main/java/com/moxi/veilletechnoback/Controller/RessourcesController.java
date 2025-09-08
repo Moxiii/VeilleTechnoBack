@@ -110,7 +110,7 @@ public ResponseEntity<?> updateRessources(@PathVariable long id, @RequestBody Re
 	ressources.setTags(updateRessources.getTags() != null ? updateRessources.getTags() : ressources.getTags());
 	ressources.setCategory(category != null ? category : ressources.getCategory());
 	ressources.setUpdatedAt(LocalDate.now());
-	ressourcesService.save(ressources);
+	ressourcesService.update(ressources);
 	return new ResponseEntity<>(toRes(ressources), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")

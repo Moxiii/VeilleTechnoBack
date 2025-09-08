@@ -1,11 +1,11 @@
 package com.moxi.veilletechnoback.Ressources;
 
-import com.moxi.veilletechnoback.Technology.Technology;
+
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+
 import java.util.List;
 
 @Service
@@ -22,6 +22,9 @@ public Ressources findByUserAndId(User user , long id) {
 }
 
 public void save(Ressources newRessources) {
+	ressourcesRepository.save(newRessources);
+}
+public void update(Ressources newRessources) {
 	ressourcesRepository.save(newRessources);
 }
 

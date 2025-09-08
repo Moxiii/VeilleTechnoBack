@@ -1,6 +1,8 @@
 package com.moxi.veilletechnoback.Project;
 import com.fasterxml.jackson.annotation.*;
 import com.moxi.veilletechnoback.Enum.Status;
+import com.moxi.veilletechnoback.Project.Features.Features;
+import com.moxi.veilletechnoback.Project.History.History;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.User.User;
 import jakarta.persistence.*;
@@ -42,4 +44,10 @@ private List<String>  links;
 		inverseJoinColumns = @JoinColumn(name = "technology_id")
 )
 private List<Technology> technology = new ArrayList<>();
+@OneToMany(mappedBy = "project" , cascade = CascadeType.ALL , orphanRemoval = true )
+@JsonManagedReference
+private List<Features> features = new ArrayList<>();
+@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+@JsonManagedReference
+private List<History> history = new ArrayList<>();
 }
