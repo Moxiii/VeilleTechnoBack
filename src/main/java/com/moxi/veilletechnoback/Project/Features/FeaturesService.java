@@ -31,7 +31,7 @@ public Features createFeature(User user,FeaturesReq req  ) {
 	return featuresRepository.save(feature);
 }
 public List<FeaturesRes> getFeaturesByProject(User user ,Long projectId) {
-	return featuresRepository.findAllByProjectIdAndUser( user,projectId)
+	return featuresRepository.findAllByProjectId( projectId)
 			.stream()
 			.map(f -> new FeaturesRes(f.getId(), f.getName(),f.getDescription(), f.getStartDate(), f.getEndDate()))
 			.toList();
@@ -41,7 +41,8 @@ public void deleteFeature(Long id) {
 }
 
 public Features updateFeatureByID(User currentUser, FeaturesReq req) {
-	Features updatedFeature = featuresRepository.findByIdAndUser(currentUser, req.getId());
+	Features updatedFeature = featuresRepository.findById(req.getId())
+			.orElseThrow(() -> new RuntimeException("Feature not found"));
 	Project project = projectService.findByUserAndId(currentUser, req.getProjectId());
 	updatedFeature.setName(req.getName() != null ? req.getName() : updatedFeature.getName());
 	updatedFeature.setDescription(req.getDescription() != null ? req.getDescription() : updatedFeature.getDescription());
