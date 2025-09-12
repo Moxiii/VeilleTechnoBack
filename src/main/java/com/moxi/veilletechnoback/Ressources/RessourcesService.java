@@ -17,8 +17,11 @@ public List<Ressources> findAll() {
 	return ressourcesRepository.findAll();
 }
 
-public Ressources findByUserAndId(User user , long id) {
+public Ressources findByUserAndId(User user , Long id) {
 	return ressourcesRepository.findByUserAndId(user , id);
+}
+public List<Ressources> findByUserAndIds(User user , List<Long> ids) {
+	return ressourcesRepository.findByUserAndIdIn(user , ids);
 }
 
 public void save(Ressources newRessources) {
