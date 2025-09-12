@@ -40,8 +40,8 @@ public void deleteFeature(Long id) {
 	featuresRepository.deleteById(id);
 }
 
-public Features updateFeatureByID(User currentUser, FeaturesReq req) {
-	Features updatedFeature = featuresRepository.findById(req.getId())
+public Features updateFeatureByID(User currentUser, Long featureId, FeaturesReq req) {
+	Features updatedFeature = featuresRepository.findById(featureId)
 			.orElseThrow(() -> new RuntimeException("Feature not found"));
 	Project project = projectService.findByUserAndId(currentUser, req.getProjectId());
 	updatedFeature.setName(req.getName() != null ? req.getName() : updatedFeature.getName());

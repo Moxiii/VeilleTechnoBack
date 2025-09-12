@@ -45,15 +45,15 @@ public ResponseEntity<FeaturesRes> addFeatures(@RequestBody FeaturesReq req) {
 	Features feature = featuresService.createFeature(currentUser , req);
 	return new ResponseEntity<>(toRes(feature), HttpStatus.CREATED);
 }
-@PutMapping
-public ResponseEntity<FeaturesRes> updateFeatures(@RequestBody FeaturesReq req) {
+@PutMapping("/{featureId}")
+public ResponseEntity<FeaturesRes> updateFeatures(@PathVariable Long featureId , @RequestBody FeaturesReq req) {
 	User currentUser = securityUtils.getCurrentUser();
-	Features feature = featuresService.updateFeatureByID(currentUser , req);
+	Features feature = featuresService.updateFeatureByID(currentUser , featureId , req);
 	return new ResponseEntity<>(toRes(feature), HttpStatus.OK);
 }
-@DeleteMapping
-public ResponseEntity<?> deleteFeatures(@RequestBody FeaturesReq req) {
-	featuresService.deleteFeature(req.getId());
+@DeleteMapping("/{featureId}")
+public ResponseEntity<?> deleteFeatures(@PathVariable Long featureId) {
+	featuresService.deleteFeature(featureId);
 	return new ResponseEntity<>(HttpStatus.OK);
 }
 }
