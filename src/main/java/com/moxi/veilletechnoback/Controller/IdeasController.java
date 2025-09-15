@@ -62,6 +62,6 @@ public ResponseEntity<IdeasRes> createIdeas(@RequestBody IdeasReq req){
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteIdeas(@PathVariable Long id){
 	ideasService.delete(id);
-	return new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 }

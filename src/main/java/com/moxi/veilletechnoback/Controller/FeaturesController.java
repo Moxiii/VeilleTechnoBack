@@ -54,6 +54,6 @@ public ResponseEntity<FeaturesRes> updateFeatures(@PathVariable Long featureId ,
 @DeleteMapping("/{featureId}")
 public ResponseEntity<?> deleteFeatures(@PathVariable Long featureId) {
 	featuresService.deleteFeature(featureId);
-	return new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 }

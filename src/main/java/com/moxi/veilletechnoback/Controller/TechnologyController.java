@@ -121,7 +121,7 @@ public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
 		}
 	}
 	technologyService.delete(technology);
-	return new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 
 }

@@ -118,7 +118,7 @@ public ResponseEntity<?> deleteRessources(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Ressources ressources = ressourcesService.findByUserAndId(currentUser,id);
 	ressourcesService.delete(ressources);
-	return new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 @GetMapping("/label")
 public List<String> getLabelName(){
