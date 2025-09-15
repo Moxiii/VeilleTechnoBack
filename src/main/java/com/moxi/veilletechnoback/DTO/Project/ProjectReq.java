@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class ProjectReq {
 private long id;
-private String projectName;
+private String name;
 private Status status;
 private List<Long> technology;
 private LocalDate startDate;

@@ -74,7 +74,7 @@ public ResponseEntity<ProjectRes> getProjectById(@PathVariable long id) {
 public ResponseEntity<ProjectRes> createProject(@RequestBody ProjectReq projectReq) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project newProject = new Project();
-	newProject.setName(projectReq.getProjectName());
+	newProject.setName(projectReq.getName());
 	LocalDate aujourdhui = LocalDate.now();
 	newProject.setCreatedAt(aujourdhui);
 	newProject.setStatus(projectReq.getStatus() != null ? projectReq.getStatus() : Status.notStarted);
