@@ -115,7 +115,7 @@ public ResponseEntity<Void> deleteProject(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser,id);
 	projectService.delete(project);
-	return new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 @GetMapping("/status")
 public List<String> getStatusJson() {
