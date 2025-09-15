@@ -56,7 +56,7 @@ private ProjectRes toRes(Project project) {
 	return res;
 }
 @GetMapping
-public ResponseEntity<?> getProject() {
+public ResponseEntity<List<ProjectRes>> getProject() {
 	User currentUser = securityUtils.getCurrentUser();
 	List<ProjectRes> res = projectService.findAllByUser(currentUser)
 			.stream()
@@ -65,21 +65,18 @@ public ResponseEntity<?> getProject() {
 	return new ResponseEntity<>(res , HttpStatus.OK);
 }
 @GetMapping("/{id}")
-public ResponseEntity<?> getProjectById(@PathVariable long id) {
+public ResponseEntity<ProjectRes> getProjectById(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser, id);
 	return new ResponseEntity<>(toRes(project) , HttpStatus.OK);
 }
 @PostMapping
-public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
+public ResponseEntity<ProjectRes> createProject(@RequestBody ProjectReq projectReq) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project newProject = new Project();
 	newProject.setName(projectReq.getProjectName());
 	LocalDate aujourdhui = LocalDate.now();
 	newProject.setCreatedAt(aujourdhui);
-	if (projectReq.getProjectName() == null || projectReq.getProjectName().isBlank()) {
-		return ResponseEntity.badRequest().body("Project name is required");
-	}
 	newProject.setStatus(projectReq.getStatus() != null ? projectReq.getStatus() : Status.notStarted);
 	newProject.setStartDate(projectReq.getStartDate() != null ? projectReq.getStartDate() : null);
 	newProject.setEndDate(projectReq.getEndDate() != null ? projectReq.getEndDate() : null);
@@ -99,7 +96,7 @@ public ResponseEntity<?> createProject(@RequestBody ProjectReq projectReq) {
 	return new ResponseEntity<>(toRes(newProject), HttpStatus.CREATED);
 }
 @PutMapping("/{id}")
-public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody UpdateProjectReq updateProject) {
+public ResponseEntity<ProjectRes> updateProject(@PathVariable long id, @RequestBody UpdateProjectReq updateProject) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser,id);
 	project.setName(updateProject.getName() != null ? updateProject.getName() : project.getName());
@@ -114,7 +111,7 @@ public ResponseEntity<?> updateProject(@PathVariable long id, @RequestBody Updat
 	return new ResponseEntity<>(toRes(project), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")
-public ResponseEntity<?> deleteProject(@PathVariable long id) {
+public ResponseEntity<Void> deleteProject(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Project project = projectService.findByUserAndId(currentUser,id);
 	projectService.delete(project);
