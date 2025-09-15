@@ -39,8 +39,13 @@ public ResponseEntity<List<CategoryRes>> getAllCategories() {
 @PostMapping
 public ResponseEntity<?> addCategory(@RequestBody CategoryReq category) {
 	User currentUser = securityUtils.getCurrentUser();
-	categoryService.createCustomCategory( category.getName() , category.getType() , currentUser);
-	return ResponseEntity.status(HttpStatus.CREATED).build();
+	Category createdCat = categoryService.createCustomCategory( category.getName() , category.getType() , currentUser);
+	CategoryRes categoryRes = new CategoryRes();
+	categoryRes.setId(createdCat.getId());
+	categoryRes.setName(createdCat.getName());
+	categoryRes.setDefaultCategory(createdCat.isDefaultCategory());
+	categoryRes.setType(String.valueOf(createdCat.getType()));
+	return new ResponseEntity<>(categoryRes , HttpStatus.CREATED);
 }
 @DeleteMapping("/{id}")
 public ResponseEntity<?> deleteCategory(@PathVariable long id)  {
