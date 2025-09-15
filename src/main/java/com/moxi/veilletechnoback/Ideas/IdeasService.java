@@ -20,11 +20,12 @@ public Ideas save(Ideas ideas){
 }
 public Ideas create(User user, IdeasReq req){
 	Ideas ideas = new Ideas();
+	ideas.setUser(user);
 	ideas.setTitle(req.getTitle());
 	ideas.setDescription(req.getDescription());
-	ideas.setTags(req.getTags());
-	ideas.setLinks(req.getLinks());
-	if(!req.getRessourcesIds().isEmpty()){
+	if (req.getTags() != null) ideas.setTags(req.getTags());
+	if (req.getLinks() != null) ideas.setLinks(req.getLinks());
+	if(req.getRessourcesIds() != null && !req.getRessourcesIds().isEmpty()){
 		List<Ressources> ressources = ressourcesService.findByUserAndIds(user, req.getRessourcesIds());
 		ideas.setRessources(ressources);
 	}

@@ -42,13 +42,13 @@ public ResponseEntity<List<IdeasRes>> getAllIdeas(){
 	return new ResponseEntity<>(ideas , HttpStatus.OK);
 }
 @GetMapping("/{id}")
-public ResponseEntity<?> getIdeasById(@PathVariable Long id) {
+public ResponseEntity<IdeasRes> getIdeasById(@PathVariable Long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Ideas ideas = ideasService.findByUserAndId(currentUser,id);
 	return new ResponseEntity<>(ideasToRes(ideas) , HttpStatus.OK);
 }
 @PutMapping("/{id}")
-public ResponseEntity<?> updateIdeas(@PathVariable Long id, @RequestBody Ideas ideas) {
+public ResponseEntity<IdeasRes> updateIdeas(@PathVariable Long id, @RequestBody Ideas ideas) {
 	User currentUser = securityUtils.getCurrentUser();
 	Ideas updated = ideasService.update(currentUser, id , ideas);
 	return new ResponseEntity<>(ideasToRes(updated) , HttpStatus.OK);
@@ -60,7 +60,7 @@ public ResponseEntity<IdeasRes> createIdeas(@RequestBody IdeasReq req){
 	return new ResponseEntity<>((ideasToRes(createdIdeas)), HttpStatus.CREATED);
 }
 @DeleteMapping("/{id}")
-public ResponseEntity<?> deleteIdeas(@PathVariable Long id){
+public ResponseEntity<Void> deleteIdeas(@PathVariable Long id){
 	ideasService.delete(id);
 	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
