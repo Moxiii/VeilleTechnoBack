@@ -30,7 +30,7 @@ private List<String>  links = new ArrayList<>();
 @CollectionTable(name="ideas_tags", joinColumns = @JoinColumn(name="ideas_id"))
 @Column(name="tag")
 private List<String> tags = new ArrayList<>();
-@OneToMany
+@ManyToMany
 @JoinTable(
 		name = "ideas_resources",
 		joinColumns = @JoinColumn(name = "idea_id"),
