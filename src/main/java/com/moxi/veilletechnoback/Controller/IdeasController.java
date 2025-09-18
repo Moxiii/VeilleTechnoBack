@@ -48,7 +48,7 @@ public ResponseEntity<IdeasRes> getIdeasById(@PathVariable Long id) {
 	return new ResponseEntity<>(ideasToRes(ideas) , HttpStatus.OK);
 }
 @PutMapping("/{id}")
-public ResponseEntity<IdeasRes> updateIdeas(@PathVariable Long id, @RequestBody Ideas ideas) {
+public ResponseEntity<IdeasRes> updateIdeas(@PathVariable Long id, @RequestBody IdeasReq ideas) {
 	User currentUser = securityUtils.getCurrentUser();
 	Ideas updated = ideasService.update(currentUser, id , ideas);
 	return new ResponseEntity<>(ideasToRes(updated) , HttpStatus.OK);

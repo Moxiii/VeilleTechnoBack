@@ -35,7 +35,7 @@ public Ideas create(User user, IdeasReq req){
 public List<Ideas> findAll(){
 	return ideasRepository.findAll();
 }
-public Ideas update(User user ,Long id , Ideas updatedIdeas){
+public Ideas update(User user ,Long id , IdeasReq updatedIdeas){
 	Ideas toUpdate = findByUserAndId(user , id);
 	toUpdate.setTitle(updatedIdeas.getTitle());
 	toUpdate.setDescription(updatedIdeas.getDescription());
