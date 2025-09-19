@@ -1,14 +1,22 @@
 package com.moxi.veilletechnoback.Controller;
 
+import com.itextpdf.text.DocumentException;
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
+import com.moxi.veilletechnoback.Pdf.PdfService;
 import com.moxi.veilletechnoback.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.moxi.veilletechnoback.DTO.User.PROFILE.UserProfileRes;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 @RestController
@@ -16,6 +24,8 @@ import com.moxi.veilletechnoback.DTO.User.PROFILE.UserProfileRes;
 public class UserController {
 @Autowired
 private SecurityUtils securityUtils;
+@Autowired
+private PdfService pdfService;
 @GetMapping
 public ResponseEntity<UserProfileRes> getUserProfile() {
 	User currentUser = securityUtils.getCurrentUser();
@@ -26,5 +36,13 @@ public ResponseEntity<UserProfileRes> getUserProfile() {
 	}
 	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+}
+@GetMapping("/generate/pdf")
+public ResponseEntity<byte[]> generatePDF() throws DocumentException, IOException {
+	User currentUser = securityUtils.getCurrentUser();
+	ByteArrayInputStream bis = pdfService.generateUserReport(currentUser);
+	HttpHeaders headers = new HttpHeaders();
+	headers.add("Content-Disposition", "inline; filename=rapport.pdf");
+	return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(bis.readAllBytes());
 }
 }
