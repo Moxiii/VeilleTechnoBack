@@ -1,8 +1,6 @@
 package com.moxi.veilletechnoback.Config.Security;
 
-import com.moxi.veilletechnoback.Config.Security.JwtCookieResolver;
-import com.moxi.veilletechnoback.User.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -21,8 +19,7 @@ public class SecurityConfig {
 
 
 
-@Autowired
-private UserService userService;
+
 
 @Bean
 public RestTemplate restTemplate() {

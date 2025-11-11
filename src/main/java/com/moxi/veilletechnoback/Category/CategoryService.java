@@ -1,6 +1,5 @@
 package com.moxi.veilletechnoback.Category;
 import com.moxi.veilletechnoback.User.User;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;

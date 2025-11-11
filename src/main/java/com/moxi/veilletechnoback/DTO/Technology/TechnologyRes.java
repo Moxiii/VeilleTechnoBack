@@ -1,9 +1,9 @@
 package com.moxi.veilletechnoback.DTO.Technology;
 
-import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
+
 import com.moxi.veilletechnoback.DTO.Category.CatwithSub;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
-import com.moxi.veilletechnoback.Category.CategoryEnum;
+
 import lombok.Getter;
 import lombok.Setter;
 
