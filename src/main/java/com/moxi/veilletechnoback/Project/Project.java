@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.Project;
 import com.fasterxml.jackson.annotation.*;
-import com.moxi.veilletechnoback.Enum.Status;
+import com.moxi.veilletechnoback.Enum.Project.Status;
 import com.moxi.veilletechnoback.Project.Features.Features;
 import com.moxi.veilletechnoback.Project.History.History;
 import com.moxi.veilletechnoback.Technology.Technology;

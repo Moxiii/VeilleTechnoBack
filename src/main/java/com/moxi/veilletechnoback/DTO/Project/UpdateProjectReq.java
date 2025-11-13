@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.DTO.Project;
 
-import com.moxi.veilletechnoback.Enum.Status;
+import com.moxi.veilletechnoback.Enum.Project.Status;
 import com.moxi.veilletechnoback.Technology.Technology;
 import lombok.Getter;
 import lombok.Setter;

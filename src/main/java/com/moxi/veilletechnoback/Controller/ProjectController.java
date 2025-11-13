@@ -4,7 +4,7 @@ import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Project.ProjectReq;
 import com.moxi.veilletechnoback.DTO.Project.UpdateProjectReq;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
-import com.moxi.veilletechnoback.Enum.Status;
+import com.moxi.veilletechnoback.Enum.Project.Status;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectService;
 

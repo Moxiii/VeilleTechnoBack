@@ -118,6 +118,12 @@ private void addProjectSection(Document document , PdfReportOptions options , Us
 	}
 	addSmallSpacer(document);
 }
+private void addTechnologyUsageSection(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
+	addSectionTitle(document, "Utilisation des technologies");
+	byte[] dummyChartImage = new byte[0];
+	addDoughnutChart(document, dummyChartImage);
+	addLargeSpacer(document);
+}
 public ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
 	Document document = new Document();
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

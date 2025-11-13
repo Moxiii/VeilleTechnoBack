@@ -1,6 +1,6 @@
 package com.moxi.veilletechnoback.Project.History;
 
-import com.moxi.veilletechnoback.Enum.Status;
+import com.moxi.veilletechnoback.Enum.History.Status;
 import com.moxi.veilletechnoback.Project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,6 +17,8 @@ public class History {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private Status status;
+private String action;
+private LocalDate timestamp;
 private LocalDate startDate;
 private LocalDate endDate = null;
 @ManyToOne
