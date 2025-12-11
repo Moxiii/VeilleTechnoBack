@@ -9,7 +9,7 @@ import com.moxi.veilletechnoback.User.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.keycloak.representations.AccessTokenResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.*;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -13,6 +13,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.User.User;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.RingPlot;
+import org.jfree.data.general.DefaultPieDataset;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -21,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class PdfService {
@@ -54,7 +61,9 @@ private void addHeader(Document document, User user) throws DocumentException {
 	Paragraph title = new Paragraph("Rapport de veille technologique", getHeaderFont());
 	title.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(title);
-
+	Paragraph userName = new Paragraph("Utilisateur: " + user.getUsername(), getBodyFont());
+	userName.setAlignment(Paragraph.ALIGN_CENTER);
+	document.add(userName);
 	Paragraph date = new Paragraph("\nDate: " + LocalDate.now(), getBodyFont());
 	date.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(date);
@@ -68,8 +77,8 @@ private void addSectionTitle(Document document, String titleText) throws Documen
 	sectionTitle.setSpacingAfter(10f);
 	document.add(sectionTitle);
 }
-private void addDoughnutChart(Document document, byte[] chartImage) throws DocumentException, IOException {
-	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartImage);
+private void addDoughnutChart(Document document, byte[] chartBytes) throws DocumentException, IOException {
+	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartBytes);
 	chart.scaleToFit(400f, 400f);
 	chart.setAlignment(Element.ALIGN_CENTER);
 	chart.setSpacingBefore(15f);
@@ -118,10 +127,45 @@ private void addProjectSection(Document document , PdfReportOptions options , Us
 	}
 	addSmallSpacer(document);
 }
+private byte[] createDoughnutChart(User user) throws IOException {
+	DefaultPieDataset dataset = new DefaultPieDataset();
+	for(Project project : user.getProjects()){
+		if(project.getTechnology() != null) {
+			for(Technology tech : project.getTechnology()) {
+				double currentValue = dataset.getKeys().contains(tech.getName())
+                        ? dataset.getValue(tech.getName()).doubleValue()
+                        : 0;
+				dataset.setValue(tech.getName(), currentValue + 1);
+			}
+		};
+	}
+	 if (dataset.getItemCount() == 0) {
+        return new byte[0];
+    }
+	JFreeChart chart = ChartFactory.createRingChart(
+			"",
+			dataset,
+			true,
+			false,
+			false
+	);
+	RingPlot plot = (RingPlot) chart.getPlot();
+	plot.setLabelGenerator(null);
+	plot.setSeparatorsVisible(false);
+	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	ChartUtils.writeChartAsPNG(baos, chart, 500, 400);
+	return baos.toByteArray();
+}
 private void addTechnologyUsageSection(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
 	addSectionTitle(document, "Utilisation des technologies");
-	byte[] dummyChartImage = new byte[0];
-	addDoughnutChart(document, dummyChartImage);
+	byte[] chartBytes = createDoughnutChart(user);
+	 if (chartBytes != null && chartBytes.length > 0) {
+        addDoughnutChart(document, chartBytes);
+    } else {
+        Paragraph placeholder = new Paragraph("Graphique indisponible");
+        placeholder.setAlignment(Element.ALIGN_CENTER);
+        document.add(placeholder);
+    }
 	addLargeSpacer(document);
 }
 public ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
@@ -133,7 +177,7 @@ public ByteArrayInputStream generateUserReport(User user , PdfReportOptions opti
 	document.open();
 	addHeader(document, user);
 	addProjectSection(document, options, user);
-		
+	addTechnologyUsageSection(document, options, user);	
 	} finally {
 		document.close();
 	}
