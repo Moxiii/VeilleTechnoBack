@@ -6,7 +6,9 @@ import com.moxi.veilletechnoback.DTO.Features.FeaturesRes;
 import com.moxi.veilletechnoback.Project.Features.Features;
 import com.moxi.veilletechnoback.Project.Features.FeaturesService;
 import com.moxi.veilletechnoback.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +17,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/features")
+@RequiredArgsConstructor
 public class FeaturesController {
-@Autowired
-private FeaturesService featuresService;
-@Autowired
-private SecurityUtils securityUtils;
+private final FeaturesService featuresService;
+private final SecurityUtils securityUtils;
 
 private FeaturesRes toRes (Features features) {
 	FeaturesRes res = new FeaturesRes();
 	res.setId(features.getId());
 	res.setName(features.getName());
 	res.setDescription(features.getDescription());
-	if(features.getStartDate() != null) {
-		res.setStartDate(features.getStartDate());
-	}
-	if(features.getEndDate() != null) {
-		res.setEndDate(features.getEndDate());
-	}
+	res.setCreatedAt(features.getCreatedAt());
 	return res;
 }
 

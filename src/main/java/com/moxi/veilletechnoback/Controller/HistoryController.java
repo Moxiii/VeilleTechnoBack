@@ -15,25 +15,23 @@ import com.moxi.veilletechnoback.DTO.History.HistoryRes;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectService;
 import com.moxi.veilletechnoback.Project.History.HistoryService;
+
 import com.moxi.veilletechnoback.User.User;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/history")
 public class HistoryController {
-@Autowired
-private HistoryService historyService;
-@Autowired
-private SecurityUtils securityUtils;
-@Autowired
-private ProjectService projectService;
-private HistoryRes historyToRes(com.moxi.veilletechnoback.Project.History.History history){
-    HistoryRes historyRes = new HistoryRes();
-    historyRes.setId(history.getId());
-    historyRes.setAction(history.getAction());
-    historyRes.setTimestamp(history.getTimestamp());
-    return historyRes;
-}
-@GetMapping("/getProjectHistory/{projectId}")
+
+private final  HistoryService historyService;
+
+private final SecurityUtils securityUtils;
+
+private final ProjectService projectService;
+
+@GetMapping("/get/{projectId}")
 public ResponseEntity<List<HistoryRes>> getProjectHistory(@PathVariable Long projectId){
     User currentUser = securityUtils.getCurrentUser();
     Project project = projectService.findByUserAndId(currentUser, projectId);

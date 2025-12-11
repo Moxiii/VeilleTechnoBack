@@ -7,6 +7,9 @@ import com.moxi.veilletechnoback.Ideas.Ideas;
 import com.moxi.veilletechnoback.Ideas.IdeasService;
 import com.moxi.veilletechnoback.Ressources.Ressources;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/ideas")
 public class IdeasController {
-@Autowired
-private SecurityUtils securityUtils;
-@Autowired
-private IdeasService ideasService;
+
+private final SecurityUtils securityUtils;
+
+private final IdeasService ideasService;
 
 private IdeasRes ideasToRes(Ideas ideas){
 	IdeasRes ideasRes = new IdeasRes();

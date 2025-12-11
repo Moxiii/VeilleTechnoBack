@@ -5,6 +5,9 @@ import com.moxi.veilletechnoback.Config.Keycloak.KeycloakService;
 import com.moxi.veilletechnoback.DTO.AUTH.Login.LoginDTO;
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
 import com.moxi.veilletechnoback.User.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -21,14 +24,13 @@ import java.time.Duration;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-@Autowired
-private JwtDecoder jwtDecoder;
-@Autowired
-private KeycloakService keycloakService;
-@Autowired
-private UserService userService;
+
+private final JwtDecoder jwtDecoder;
+private final KeycloakService keycloakService;
+private final UserService userService;
 @PostMapping("/login")
 public ResponseEntity<Void> login(@RequestBody LoginDTO cred) {
 	AccessTokenResponse tok = keycloakService.login(cred.getUsername(), cred.getPassword());

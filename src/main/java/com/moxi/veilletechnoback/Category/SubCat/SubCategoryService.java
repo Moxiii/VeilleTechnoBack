@@ -4,18 +4,19 @@ import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.CategoryEnum;
 import com.moxi.veilletechnoback.Category.CategoryRepository;
 import com.moxi.veilletechnoback.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SubCategoryService {
-@Autowired
-private SubCategoryRepository subCategoryRepository;
-@Autowired
-private CategoryRepository categoryRepository;
+private final SubCategoryRepository subCategoryRepository;
+private final CategoryRepository categoryRepository;
 public List<SubCategory> findByUser(User user){
 	return subCategoryRepository.findByUser(user);
 }

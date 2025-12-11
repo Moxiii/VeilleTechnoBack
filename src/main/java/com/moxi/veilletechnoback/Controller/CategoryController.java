@@ -7,7 +7,9 @@ import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Category.CategoryReq;
 import com.moxi.veilletechnoback.DTO.Category.CategoryRes;
 import com.moxi.veilletechnoback.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/category")
 public class CategoryController {
-@Autowired
-private CategoryService categoryService;
-@Autowired
-private SecurityUtils securityUtils;
+
+private final CategoryService categoryService;
+
+private final SecurityUtils securityUtils;
 
 @GetMapping
 public ResponseEntity<List<CategoryRes>> getAllCategories() {

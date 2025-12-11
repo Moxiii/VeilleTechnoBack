@@ -2,7 +2,7 @@ package com.moxi.veilletechnoback.DTO.History;
 
 import java.time.LocalDate;
 
-import com.moxi.veilletechnoback.Enum.History.Status;
+import com.moxi.veilletechnoback.Enum.History.HistoryType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +11,16 @@ import lombok.Setter;
 @Setter
 public class HistoryRes {
     private Long id;
+    private HistoryType type;
     private String action;
-    private Status status;
-    private LocalDate startDate;
-    private LocalDate endDate;
     private LocalDate timestamp;
+
+    private String fieldName;
+    private String oldValue;
+    private String newValue;
+
+    private String message;
+
+    private Long projectId;
+    private Long featureId;
 }

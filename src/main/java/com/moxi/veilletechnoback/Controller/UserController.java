@@ -5,6 +5,9 @@ import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.Pdf.PdfReportOptions;
 import com.moxi.veilletechnoback.Pdf.PdfService;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +27,12 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-@Autowired
-private SecurityUtils securityUtils;
-@Autowired
-private PdfService pdfService;
+
+private final SecurityUtils securityUtils;
+
+private final  PdfService pdfService;
 @GetMapping
 public ResponseEntity<UserProfileRes> getUserProfile() {
 	User currentUser = securityUtils.getCurrentUser();

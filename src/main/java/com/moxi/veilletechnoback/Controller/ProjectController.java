@@ -11,6 +11,9 @@ import com.moxi.veilletechnoback.Project.ProjectService;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +28,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/project")
+@RequiredArgsConstructor
 public class ProjectController {
-@Autowired
-private ProjectService projectService;
-@Autowired
-private TechnologyService technologyService;
-@Autowired
-private SecurityUtils securityUtils;
+
+private final ProjectService projectService;
+
+private final TechnologyService technologyService;
+
+private final SecurityUtils securityUtils;
 
 private ProjectRes toRes(Project project) {
 	ProjectRes res = new ProjectRes();

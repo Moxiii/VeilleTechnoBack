@@ -22,8 +22,7 @@ private Long id;
 private String name;
 private String description;
 private LocalDate createdAt = LocalDate.now();
-private LocalDate startDate = LocalDate.now();
-private LocalDate endDate = LocalDate.now();
+
 @ManyToOne
 @JoinColumn(name = "project_id")
 @JsonBackReference

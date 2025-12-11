@@ -18,6 +18,9 @@ import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,18 +30,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/technology")
 public class TechnologyController {
-@Autowired
-private TechnologyService technologyService;
-@Autowired
-private CategoryService categoryService;
-@Autowired
-private SubCategoryService subCategoryService;
-@Autowired
-private SecurityUtils securityUtils;
-@Autowired
-private ProjectService projectService;
+
+private final TechnologyService technologyService;
+
+private final CategoryService categoryService;
+
+private final SubCategoryService subCategoryService;
+
+private final SecurityUtils securityUtils;
+
+private final ProjectService projectService;
 
 private TechnologyRes techToRes(Technology technology) {
 	TechnologyRes res =  new TechnologyRes();
@@ -113,7 +117,7 @@ public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody Te
 public ResponseEntity<?> deleteTechnology(@PathVariable long id) {
 	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
-	List<Project> projects = projectService.findByuser(currentUser);
+	List<Project> projects = projectService.findAllByUser(currentUser);
 	for(Project project : projects){
 		if(project.getTechnology().contains(technology)){
 			project.getTechnology().remove(technology);

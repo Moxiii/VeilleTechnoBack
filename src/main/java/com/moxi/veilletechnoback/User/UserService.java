@@ -1,17 +1,19 @@
 package com.moxi.veilletechnoback.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-@Autowired
-private UserRepository userRepository;
+
+private final UserRepository userRepository;
 
 
 public Optional<User> findById(String id){

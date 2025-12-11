@@ -1,6 +1,8 @@
 package com.moxi.veilletechnoback.Category;
 import com.moxi.veilletechnoback.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -8,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-@Autowired
-private CategoryRepository categoryRepository;
+private final CategoryRepository categoryRepository;
 public List<Category> findByUser(User user){
 	return categoryRepository.findByUser(user);
 }

@@ -6,6 +6,9 @@ import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
 import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +17,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TechnologyService {
-@Autowired
-private TechnologyRepository technologyRepository;
-@Autowired
-private CategoryService categoryService;
-@Autowired
-private SubCategoryService subCategoryService;
+
+private final TechnologyRepository technologyRepository;
+
+private final CategoryService categoryService;
+
+private final SubCategoryService subCategoryService;
 
 public List<Technology> findAll() {
 	return technologyRepository.findAll();

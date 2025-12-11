@@ -2,16 +2,18 @@ package com.moxi.veilletechnoback.Ressources;
 
 
 import com.moxi.veilletechnoback.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RessourcesService {
-@Autowired
-private RessourcesRepository ressourcesRepository;
+private final RessourcesRepository ressourcesRepository;
 
 public List<Ressources> findAll() {
 	return ressourcesRepository.findAll();

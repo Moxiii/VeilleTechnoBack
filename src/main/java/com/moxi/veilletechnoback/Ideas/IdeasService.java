@@ -4,17 +4,21 @@ import com.moxi.veilletechnoback.DTO.Ideas.IdeasReq;
 import com.moxi.veilletechnoback.Ressources.Ressources;
 import com.moxi.veilletechnoback.Ressources.RessourcesService;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class IdeasService {
-@Autowired
-private IdeasRepository ideasRepository;
-@Autowired
-private RessourcesService ressourcesService;
+
+private final IdeasRepository ideasRepository;
+
+private final RessourcesService ressourcesService;
 public Ideas save(Ideas ideas){
 	return ideasRepository.save(ideas);
 }

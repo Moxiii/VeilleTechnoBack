@@ -2,18 +2,20 @@ package com.moxi.veilletechnoback.Config.Security;
 
 import com.moxi.veilletechnoback.User.User;
 import com.moxi.veilletechnoback.User.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class SecurityUtils {
-@Autowired
-private UserService userService;
+
+private final UserService userService;
 
 public User getCurrentUser() {
 	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

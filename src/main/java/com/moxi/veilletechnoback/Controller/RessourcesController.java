@@ -12,6 +12,8 @@ import com.moxi.veilletechnoback.Ressources.RessourcesService;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.TechnologyService;
 import com.moxi.veilletechnoback.User.User;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,17 +27,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/ressources")
 public class RessourcesController {
-@Autowired
-private RessourcesService ressourcesService;
-@Autowired
-private TechnologyService technologyService;
-@Autowired
-private SecurityUtils securityUtils;
-@Autowired
-private CategoryService categoryService;
+
+private final RessourcesService ressourcesService;
+
+private final TechnologyService technologyService;
+
+private final SecurityUtils securityUtils;
+
+private final CategoryService categoryService;
 
 private RessourcesRes toRes(Ressources ressources) {
 	RessourcesRes res = new RessourcesRes();

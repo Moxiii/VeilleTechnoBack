@@ -4,6 +4,8 @@ package com.moxi.veilletechnoback.Config.Keycloak;
 import com.moxi.veilletechnoback.DTO.AUTH.REGISTER.RegisterDTO;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
+
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -22,9 +24,9 @@ import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class KeycloakService {
-@Autowired
-private Keycloak adminKc;
+private final Keycloak adminKc;
 @Value("${kc.server}") String server;
 public AccessTokenResponse login(String username, String password) {
 	try {
