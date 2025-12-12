@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import com.moxi.veilletechnoback.Ressources.Ressources;
+import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,4 +49,13 @@ private List<SubCategory> subCategory = new ArrayList<>();
 		inverseJoinColumns =  @JoinColumn(name="linked_technology_id")
 )
 private List<Technology> linkedTechnologies = new ArrayList<>();
+@ManyToOne
+@JoinColumn(name = "parent_id")
+private Technology parent;
+@OneToMany(mappedBy = "parent")
+private List<Technology> subTechnologies = new ArrayList<>();
+@ElementCollection
+@CollectionTable(name = "technology_concepts", joinColumns = @JoinColumn(name = "technology_id"))
+@Column(name = "concept")
+private List<Concepts> concepts = new ArrayList<>();	
 }

@@ -31,7 +31,7 @@ public Features createFeature(User user,FeaturesReq req  ) {
 	feature.setCreatedAt(today);
 	Features savedFeature = featuresRepository.save(feature);
 	historyService.logFeatureChange(
-  project,
+  		project,
         savedFeature,
         HistoryType.FEATURE_CREATED,
         "name",
