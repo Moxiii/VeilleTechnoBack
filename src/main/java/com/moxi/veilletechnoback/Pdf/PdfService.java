@@ -25,7 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -90,7 +92,24 @@ private void addSmallSpacer(Document document) throws DocumentException {
     spacer.setSpacingAfter(8f);
     document.add(spacer);
 }
-
+private Paragraph calculateTechnologyUsagePercent(User user){
+	Map<String , Long> techCount = new HashMap<>();
+	long totalCount = 0;
+	for(Project project : user.getProjects()){
+		if(project.getTechnology() != null) {
+			for(Technology tech : project.getTechnology()) {
+				techCount.put(tech.getName(), techCount.getOrDefault(tech.getName(), 0L) + 1);
+				totalCount++;
+			}
+		};
+	}
+	Paragraph paragraph = new Paragraph("" , getBodyFont());
+	for(Map.Entry<String, Long> entry : techCount.entrySet()){
+		double percent = (entry.getValue() * 100.0) / totalCount;
+		paragraph.add(new Paragraph(entry.getKey() + ": " + String.format("%.0f", percent) + "%\n"));
+	}
+	return paragraph;
+}
 private void addLargeSpacer(Document document) throws DocumentException {
     Paragraph spacer = new Paragraph();
     spacer.setSpacingAfter(20f);
@@ -166,6 +185,11 @@ private void addTechnologyUsageSection(Document document , PdfReportOptions opti
         placeholder.setAlignment(Element.ALIGN_CENTER);
         document.add(placeholder);
     }
+	addSmallSpacer(document);
+	Paragraph usageText = new Paragraph("Pourcentage d'utilisation des technologies dans les projets :", getBodyFont());
+	usageText.setAlignment(Element.ALIGN_LEFT);
+	document.add(usageText);
+	document.add(calculateTechnologyUsagePercent(user));
 	addLargeSpacer(document);
 }
 public ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
