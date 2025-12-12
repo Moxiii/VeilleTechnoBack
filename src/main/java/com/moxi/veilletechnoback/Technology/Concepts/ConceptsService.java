@@ -22,7 +22,7 @@ public class ConceptsService {
     private final ProjectRepository projectRepository;
     private final SecurityUtils securityUtils;
     private User getCurrentUser() {
-        return securityUtils.getCurrentUser()
+        return securityUtils.getCurrentUser();
     } ;
 
     public Concepts create(ConceptsReq req) {
