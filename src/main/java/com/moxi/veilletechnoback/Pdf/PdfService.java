@@ -1,197 +1,35 @@
 package com.moxi.veilletechnoback.Pdf;
-import com.moxi.veilletechnoback.Technology.Technology;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
+
+import com.moxi.veilletechnoback.Pdf.section.Header;
+import com.moxi.veilletechnoback.Pdf.section.ProjectSection;
+import com.moxi.veilletechnoback.Pdf.section.TechnologyThreeSection;
+import com.moxi.veilletechnoback.Pdf.section.TechnologyUsageSection;
+
 import com.itextpdf.text.pdf.PdfWriter;
-import com.moxi.veilletechnoback.Project.Project;
+
 import com.moxi.veilletechnoback.User.User;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtils;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.RingPlot;
-import org.jfree.data.general.DefaultPieDataset;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 
 @Service
+@RequiredArgsConstructor
 public class PdfService {
-private Font getHeaderFont(){
-	return new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-}
+private final Header header;
+private final ProjectSection projectSection;
+private final TechnologyUsageSection technologyUsageSection;
+private final TechnologyThreeSection technologyThreeSection;
 
-private Font getTitleFont(){
-	return new Font(Font.FontFamily.HELVETICA, 15, Font.NORMAL);
-}
-private Font getBodyFont(){
-	return new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
-}
-private PdfPCell createCell(String text , boolean isHeader  ){
-	PdfPCell cell = new PdfPCell(new Paragraph(text));
-	cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	cell.setPadding(8f);
-	cell.setMinimumHeight(25f);
-     if (isHeader) {
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-        cell.setPhrase(new Phrase(text, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
-    } else {
-        cell.setBackgroundColor(BaseColor.WHITE);
-        cell.setPhrase(new Phrase(text, new Font(Font.FontFamily.HELVETICA, 11)));
-    }
-    cell.setBorderWidth(0.5f);
-	return cell;
-}
-private void addHeader(Document document, User user) throws DocumentException {
-	Paragraph title = new Paragraph("Rapport de veille technologique", getHeaderFont());
-	title.setAlignment(Paragraph.ALIGN_CENTER);
-	document.add(title);
-	Paragraph userName = new Paragraph("Utilisateur: " + user.getUsername(), getBodyFont());
-	userName.setAlignment(Paragraph.ALIGN_CENTER);
-	document.add(userName);
-	Paragraph date = new Paragraph("\nDate: " + LocalDate.now(), getBodyFont());
-	date.setAlignment(Paragraph.ALIGN_CENTER);
-	document.add(date);
-
-	document.add(Chunk.NEWLINE);
-}
-private void addSectionTitle(Document document, String titleText) throws DocumentException {
-	Paragraph sectionTitle = new Paragraph(titleText, getTitleFont());
-	sectionTitle.setAlignment(Paragraph.ALIGN_MIDDLE);
-	sectionTitle.setSpacingBefore(10f);
-	sectionTitle.setSpacingAfter(10f);
-	document.add(sectionTitle);
-}
-private void addDoughnutChart(Document document, byte[] chartBytes) throws DocumentException, IOException {
-	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartBytes);
-	chart.scaleToFit(400f, 400f);
-	chart.setAlignment(Element.ALIGN_CENTER);
-	chart.setSpacingBefore(15f);
-	chart.setSpacingAfter(20f);
-	document.add(chart);
-}
-private void addSmallSpacer(Document document) throws DocumentException {
-    Paragraph spacer = new Paragraph();
-    spacer.setSpacingAfter(8f);
-    document.add(spacer);
-}
-private Paragraph calculateTechnologyUsagePercent(User user){
-	Map<String , Long> techCount = new HashMap<>();
-	long totalCount = 0;
-	for(Project project : user.getProjects()){
-		if(project.getTechnology() != null) {
-			for(Technology tech : project.getTechnology()) {
-				techCount.put(tech.getName(), techCount.getOrDefault(tech.getName(), 0L) + 1);
-				totalCount++;
-			}
-		};
-	}
-	Paragraph paragraph = new Paragraph("" , getBodyFont());
-	for(Map.Entry<String, Long> entry : techCount.entrySet()){
-		double percent = (entry.getValue() * 100.0) / totalCount;
-		paragraph.add(new Paragraph(entry.getKey() + ": " + String.format("%.0f", percent) + "%\n"));
-	}
-	return paragraph;
-}
-private void addLargeSpacer(Document document) throws DocumentException {
-    Paragraph spacer = new Paragraph();
-    spacer.setSpacingAfter(20f);
-    document.add(spacer);
-}
-private void addProjectTable(Document document, List<Project> projects) throws DocumentException {
-	PdfPTable table = new PdfPTable(3);
-	table.setWidthPercentage(100);
-	table.setSpacingBefore(10f);
-	table.setSpacingAfter(10f);
-	table.setWidths(new float[]{2f, 1f, 3f});
-
-	table.addCell(createCell("Projet", true));
-	table.addCell(createCell("Status", true));
-	table.addCell(createCell("Technologies", true));
-
-	for (Project p : projects) {
-		table.addCell(createCell(p.getName(), false));
-		table.addCell(createCell(p.getStatus().toString(), false));
-		table.addCell(createCell(p.getTechnology().stream()
-				.map(Technology::getName)
-				.collect(Collectors.joining(", ")), false));
-	}
-	document.add(table);
-}
-private void addProjectSection(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
-	addSectionTitle(document, "Projets");
-	List<Project> filteredrojects = user.getProjects().stream()
-			.filter(p->options.isIncludeAllProjects() || 
-			(options.getProjectIdsToInclude() != null && options.getProjectIdsToInclude().contains(p.getId())))
-			.collect(Collectors.toList());
-	if(!filteredrojects.isEmpty()){
-		addProjectTable(document, filteredrojects);
-	}
-	addSmallSpacer(document);
-}
-private byte[] createDoughnutChart(User user) throws IOException {
-	DefaultPieDataset dataset = new DefaultPieDataset();
-	for(Project project : user.getProjects()){
-		if(project.getTechnology() != null) {
-			for(Technology tech : project.getTechnology()) {
-				double currentValue = dataset.getKeys().contains(tech.getName())
-                        ? dataset.getValue(tech.getName()).doubleValue()
-                        : 0;
-				dataset.setValue(tech.getName(), currentValue + 1);
-			}
-		};
-	}
-	 if (dataset.getItemCount() == 0) {
-        return new byte[0];
-    }
-	JFreeChart chart = ChartFactory.createRingChart(
-			"",
-			dataset,
-			true,
-			false,
-			false
-	);
-	RingPlot plot = (RingPlot) chart.getPlot();
-	plot.setLabelGenerator(null);
-	plot.setSeparatorsVisible(false);
-	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	ChartUtils.writeChartAsPNG(baos, chart, 500, 400);
-	return baos.toByteArray();
-}
-private void addTechnologyUsageSection(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
-	addSectionTitle(document, "Utilisation des technologies");
-	byte[] chartBytes = createDoughnutChart(user);
-	 if (chartBytes != null && chartBytes.length > 0) {
-        addDoughnutChart(document, chartBytes);
-    } else {
-        Paragraph placeholder = new Paragraph("Graphique indisponible");
-        placeholder.setAlignment(Element.ALIGN_CENTER);
-        document.add(placeholder);
-    }
-	addSmallSpacer(document);
-	Paragraph usageText = new Paragraph("Pourcentage d'utilisation des technologies dans les projets :", getBodyFont());
-	usageText.setAlignment(Element.ALIGN_LEFT);
-	document.add(usageText);
-	document.add(calculateTechnologyUsagePercent(user));
-	addLargeSpacer(document);
-}
 public ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
 	Document document = new Document();
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -199,9 +37,10 @@ public ByteArrayInputStream generateUserReport(User user , PdfReportOptions opti
 
 	PdfWriter.getInstance(document , outputStream);
 	document.open();
-	addHeader(document, user);
-	addProjectSection(document, options, user);
-	addTechnologyUsageSection(document, options, user);	
+	header.render(document , user);
+	projectSection.render(document,options, user);
+	technologyUsageSection.render(document, user);	
+	technologyThreeSection.render(document, user);
 	} finally {
 		document.close();
 	}

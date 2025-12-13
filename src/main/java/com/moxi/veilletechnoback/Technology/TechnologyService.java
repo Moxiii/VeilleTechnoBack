@@ -54,10 +54,6 @@ public Technology create(TechnologyReq req, User user) {
 				.toList();
 		technology.setSubCategory(subCategories);
 	}
-	if (req.getLinkedTechnologyIds() != null) {
-		List<Technology> linked = technologyRepository.findAllById(req.getLinkedTechnologyIds());
-		technology.setLinkedTechnologies(linked);
-	}
 
 	return technologyRepository.save(technology);
 }

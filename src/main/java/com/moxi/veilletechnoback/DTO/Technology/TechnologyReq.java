@@ -2,7 +2,7 @@ package com.moxi.veilletechnoback.DTO.Technology;
 
 
 import com.moxi.veilletechnoback.Category.CategoryEnum;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +20,5 @@ private CategoryEnum customCategoryType;
 
 private List<Long> subCategoryIds;
 
-private List<Long> linkedTechnologyIds;
+
 }

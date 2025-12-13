@@ -42,13 +42,6 @@ private List<Ressources> resources;
 private Category category;
 @ManyToMany
 private List<SubCategory> subCategory = new ArrayList<>();
-@ManyToMany
-@JoinTable(
-		name="technology_links",
-		joinColumns = @JoinColumn(name="technology_id"),
-		inverseJoinColumns =  @JoinColumn(name="linked_technology_id")
-)
-private List<Technology> linkedTechnologies = new ArrayList<>();
 @ManyToOne
 @JoinColumn(name = "parent_id")
 private Technology parent;

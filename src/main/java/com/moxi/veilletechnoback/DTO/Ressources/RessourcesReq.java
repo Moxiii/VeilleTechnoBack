@@ -2,7 +2,7 @@ package com.moxi.veilletechnoback.DTO.Ressources;
 
 
 import com.moxi.veilletechnoback.Enum.Ressources.labelName;
-import com.moxi.veilletechnoback.Technology.Technology;
+
 import jakarta.persistence.ElementCollection;
 import lombok.Getter;
 import lombok.Setter;
