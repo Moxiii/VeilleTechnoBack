@@ -39,10 +39,10 @@ private void addTechThree(Document document , List<Technology> techs) throws Doc
 }
 public void render(Document document , User user) throws DocumentException, IOException {
 	addSectionTitle.create(document, "Notions aborder par technologie");
+	document.add(pdfSpacer.small());
 	addTechThree(document, user.getProjects().stream()
 			.flatMap(p -> p.getTechnology().stream())
 			.distinct()
 			.collect(Collectors.toList()));
-    pdfSpacer.medium();
 }
 }

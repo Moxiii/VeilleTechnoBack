@@ -23,12 +23,12 @@ public void render(Document document, User user) throws DocumentException {
 	Paragraph title = new Paragraph("Rapport de veille technologique", pdfFonts.header());
 	title.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(title);
-	Paragraph userName = new Paragraph("Utilisateur: " + user.getUsername(), pdfFonts.body());
+	Paragraph userName = new Paragraph("\nUtilisateur: " + user.getUsername(), pdfFonts.body());
 	userName.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(userName);
 	Paragraph date = new Paragraph("\nDate: " + LocalDate.now(), pdfFonts.body());
 	date.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(date);
-	pdfSpacer.title();
+	document.add(pdfSpacer.title());
 }
 }

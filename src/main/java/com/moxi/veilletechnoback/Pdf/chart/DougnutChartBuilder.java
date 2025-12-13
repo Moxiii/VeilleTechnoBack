@@ -10,8 +10,9 @@ import org.jfree.chart.plot.RingPlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.springframework.stereotype.Component;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 
-import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.User.User;
@@ -21,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class DougnutChartBuilder {
-private final PdfSpacer pdfSpacer;
-public byte[] createDoughnutChart(User user) throws IOException {
+
+public byte[] createDoughnutChart(User user ) throws IOException, DocumentException {
 	DefaultPieDataset dataset = new DefaultPieDataset();
 	for(Project project : user.getProjects()){
 		if(project.getTechnology() != null) {
@@ -49,7 +50,6 @@ public byte[] createDoughnutChart(User user) throws IOException {
 	plot.setSeparatorsVisible(false);
 	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	ChartUtils.writeChartAsPNG(baos, chart, 500, 400);
-    pdfSpacer.medium();
 	return baos.toByteArray();
 }
 }

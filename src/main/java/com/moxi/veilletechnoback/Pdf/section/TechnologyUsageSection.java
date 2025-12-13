@@ -30,12 +30,13 @@ private void addDoughnutChart(Document document, byte[] chartBytes) throws Docum
 	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartBytes);
 	chart.scaleToFit(400f, 400f);
 	chart.setAlignment(Element.ALIGN_CENTER);
-    pdfSpacer.large();
+    document.add(pdfSpacer.large());
 	document.add(chart);
 }
 public void render(Document document , User user) throws DocumentException, IOException {
 	addSectionTitle.create(document, "Utilisation des technologies");
-	byte[] chartBytes = dougnutChartBuilder.createDoughnutChart(user);
+	document.add(pdfSpacer.small());
+	byte[] chartBytes = dougnutChartBuilder.createDoughnutChart(user );
 	 if (chartBytes != null && chartBytes.length > 0) {
         addDoughnutChart(document, chartBytes);
     } else {
@@ -44,9 +45,11 @@ public void render(Document document , User user) throws DocumentException, IOEx
         document.add(placeholder);
     }
 
-	Paragraph usageText = new Paragraph("Pourcentage d'utilisation des technologies dans les projets :", pdfFonts.body());
+	Paragraph usageText = new Paragraph("Pourcentage d'utilisation des technologies dans les projets :", pdfFonts.title());
+	document.add(pdfSpacer.medium());
 	usageText.setAlignment(Element.ALIGN_LEFT);
 	document.add(usageText);
+	document.add(pdfSpacer.small());
 	document.add(techUsageStats.calculateTechnologyUsagePercent(user));
 
 }

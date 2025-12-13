@@ -51,7 +51,7 @@ private PdfPCell createCell(String text , boolean isHeader  ){
 private void addProjectTable(Document document, List<Project> projects) throws DocumentException {
 	PdfPTable table = new PdfPTable(3);
 	table.setWidthPercentage(100);
-    pdfSpacer.large();
+    document.add(pdfSpacer.large());
 	table.setWidths(new float[]{2f, 1f, 3f});
 
 	table.addCell(createCell("Projet", true));

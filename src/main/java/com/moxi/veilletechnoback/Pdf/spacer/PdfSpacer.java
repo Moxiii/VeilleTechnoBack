@@ -7,9 +7,8 @@ import com.itextpdf.text.Paragraph;
 @Component
 public class PdfSpacer {
     private Paragraph spacer(float space){
-        Paragraph p  = new Paragraph();
-        p.add("\n");
-        p.setSpacingBefore(space);
+        Paragraph p  = new Paragraph("\u00A0");
+        p.setSpacingAfter(space);
         return p;
     };
 

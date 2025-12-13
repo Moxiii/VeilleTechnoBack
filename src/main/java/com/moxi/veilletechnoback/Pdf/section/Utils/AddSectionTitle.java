@@ -18,7 +18,7 @@ private final PdfSpacer pdfSpacer;
 public void create(Document document, String titleText) throws DocumentException {
 	Paragraph sectionTitle = new Paragraph(titleText, pdfFonts.title());
 	sectionTitle.setAlignment(Paragraph.ALIGN_MIDDLE);
-    pdfSpacer.title();
+    document.add(pdfSpacer.title());
 	document.add(sectionTitle);
 }
 }

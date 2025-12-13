@@ -19,7 +19,7 @@ public class PdfFonts {
 
     public PdfFonts(){
         this.header = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-        this.title = new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL);
+        this.title = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
         this.body = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
         this.small = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
         this.italic = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
