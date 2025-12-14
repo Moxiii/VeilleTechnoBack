@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +45,7 @@ public ResponseEntity<UserProfileRes> getUserProfile() {
 	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 }
-@GetMapping("/generate/pdf")
+@PostMapping("/generate/pdf")
 public ResponseEntity<byte[]> generatePDF(@RequestBody(required = false) PdfReportOptions options) throws DocumentException, IOException {
 	User currentUser = securityUtils.getCurrentUser();
 	if(options == null){
@@ -52,7 +53,7 @@ public ResponseEntity<byte[]> generatePDF(@RequestBody(required = false) PdfRepo
 	}
 	ByteArrayInputStream bis = pdfService.generateUserReport(currentUser , options);
 	HttpHeaders headers = new HttpHeaders();
-	headers.add("Content-Disposition", "inline; filename=rapport.pdf");
+	headers.add("Content-Disposition", options.isDownload() ? "attachment; filename=rapport.pdf" : "inline; filename=rapport.pdf");
 	return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(bis.readAllBytes());
 }
 }

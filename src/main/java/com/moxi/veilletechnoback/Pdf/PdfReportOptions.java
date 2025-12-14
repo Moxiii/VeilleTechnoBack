@@ -13,4 +13,5 @@ public class PdfReportOptions {
     private boolean includeHistory = false;
     private List<Long> projectIdsToInclude;
     private List<Long> techIdsToInclude;
+    private boolean download = false;
 }
