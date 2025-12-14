@@ -16,11 +16,13 @@ public class PdfFonts {
     private final Font italic;
     private final Font tableHeader;
     private final Font tableBody;
+    private final Font bold;
 
     public PdfFonts(){
         this.header = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
         this.title = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
         this.body = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+        this.bold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
         this.small = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
         this.italic = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
         this.tableHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
@@ -48,5 +50,8 @@ public class PdfFonts {
     }
     public Font tableBody() {
         return tableBody;
+    }
+    public Font bold() {
+        return bold;
     }
 }

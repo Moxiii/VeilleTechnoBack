@@ -1,9 +1,5 @@
 package com.moxi.veilletechnoback.Pdf.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import org.springframework.stereotype.Component;
 

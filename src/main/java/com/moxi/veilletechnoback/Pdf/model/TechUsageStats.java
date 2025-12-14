@@ -1,7 +1,5 @@
 package com.moxi.veilletechnoback.Pdf.model;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -9,8 +7,7 @@ import com.itextpdf.text.Paragraph;
 import com.moxi.veilletechnoback.DTO.Technology.TechUsageNode;
 import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
 import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
-import com.moxi.veilletechnoback.Project.Project;
-import com.moxi.veilletechnoback.Technology.Technology;
+
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
