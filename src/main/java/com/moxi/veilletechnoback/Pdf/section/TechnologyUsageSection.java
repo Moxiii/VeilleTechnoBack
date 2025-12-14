@@ -50,7 +50,7 @@ public void render(Document document , User user) throws DocumentException, IOEx
 	usageText.setAlignment(Element.ALIGN_LEFT);
 	document.add(usageText);
 	document.add(pdfSpacer.small());
-	document.add(techUsageStats.calculateTechnologyUsagePercent(user));
+	document.add(techUsageStats.render(user));
 
 }
 }

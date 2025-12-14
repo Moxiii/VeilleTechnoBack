@@ -71,4 +71,7 @@ public void delete(Technology technology) {
 public List<Technology> findAllById(List<Long> id) {
 	return technologyRepository.findAllById(id);
 }
+public List<Technology> findByParentIsNullAndUser(User user) {
+	return technologyRepository.findByParentIsNullAndUser(user);
+}
 }
