@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.Pdf.section;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,14 +50,18 @@ private PdfPCell createCell(String text , boolean isHeader  ){
 	return cell;
 }
 private void addProjectTable(Document document, List<Project> projects) throws DocumentException {
-	PdfPTable table = new PdfPTable(3);
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	PdfPTable table = new PdfPTable(4);
 	table.setWidthPercentage(100);
     document.add(pdfSpacer.large());
-	table.setWidths(new float[]{2f, 1f, 3f});
+	table.setWidths(new float[]{2f, 2f, 3f , 1f});
 
 	table.addCell(createCell("Projet", true));
 	table.addCell(createCell("Status", true));
 	table.addCell(createCell("Technologies", true));
+	table.addCell(createCell("Modifié le", true));
+
+	
 
 	for (Project p : projects) {
 		table.addCell(createCell(p.getName(), false));
@@ -64,6 +69,10 @@ private void addProjectTable(Document document, List<Project> projects) throws D
 		table.addCell(createCell(p.getTechnology().stream()
 				.map(Technology::getName)
 				.collect(Collectors.joining(", ")), false));
+		String updatedAt = p.getUpdatedAt() != null ? 
+		p.getUpdatedAt().format(formatter) :
+		 "Non modifié";
+		table.addCell(createCell(updatedAt, false));
 	}
 	document.add(table);
 }

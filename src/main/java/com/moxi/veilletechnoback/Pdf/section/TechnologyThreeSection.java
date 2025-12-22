@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
-
+import com.moxi.veilletechnoback.Pdf.chart.DougnutChartBuilder;
 import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
 import com.moxi.veilletechnoback.Pdf.section.Utils.AddSectionTitle;
 import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
@@ -29,6 +29,8 @@ private final PdfSpacer pdfSpacer;
 private final AddSectionTitle addSectionTitle;
 private final PdfFonts pdfFonts;
 private static final int INDENT_SIZE = 3;
+private final DougnutChartBuilder dougnutChartBuilder;
+
 
 private void addIndentedParagraph(Document document , int level , String name) throws DocumentException {
 	document.add(new Paragraph(getIndent(level) + "- " + name));

@@ -32,6 +32,7 @@ private String name;
 private LocalDate createdAt;
 private LocalDate startDate;
 private LocalDate endDate;
+private LocalDate updatedAt;
 private Status status;
 @ElementCollection
 @CollectionTable(name = "project_links", joinColumns = @JoinColumn(name = "project_id"))
@@ -50,4 +51,6 @@ private List<Features> features = new ArrayList<>();
 @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 @JsonManagedReference
 private List<History> history = new ArrayList<>();
+@Column(length = 1000)
+private String pdfDescription;
 }

@@ -111,6 +111,7 @@ public ResponseEntity<ProjectRes> updateProject(@PathVariable long id, @RequestB
 
 	project.setTechnology(technologies);
 	project.setStatus(updateProject.getStatus() != null ? updateProject.getStatus() : project.getStatus());
+	project.setUpdatedAt(LocalDate.now());
 	projectService.update(project);
 	return new ResponseEntity<>(toRes(project), HttpStatus.OK);
 }

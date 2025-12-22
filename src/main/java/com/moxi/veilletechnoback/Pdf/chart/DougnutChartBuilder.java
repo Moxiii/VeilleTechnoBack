@@ -30,10 +30,10 @@ private Technology findRooTechnology(Technology tech) {
 	}
 	return current;
 }
-public byte[] createDoughnutChart(User user ) throws IOException, DocumentException {
+public byte[] createDoughnutChart(Project project ) throws IOException, DocumentException {
 	DefaultPieDataset dataset = new DefaultPieDataset();
 
-	for(Project project : user.getProjects()){
+	for(Project p : project){
 		Set<Technology> rootUsedInProject = new HashSet<>();
 		if(project.getTechnology() != null) {
 
