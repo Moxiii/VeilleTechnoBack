@@ -1,10 +1,11 @@
 package com.moxi.veilletechnoback.Pdf.section;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
+import java.util.Map;
+import com.moxi.veilletechnoback.Category.Category;
 
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,6 @@ import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
 import com.moxi.veilletechnoback.Pdf.section.Utils.AddSectionTitle;
 import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
-import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
 import com.moxi.veilletechnoback.User.User;
 
@@ -37,47 +37,48 @@ private void addIndentedParagraph(Document document , int level , String name) t
 }
 private String getIndent(int level){
 	return " ".repeat(level * INDENT_SIZE);
-}	
-private boolean markTechSeen(Set<Technology> seenTech , Technology tech){
-	return seenTech.add(tech);
 }
-private boolean markConceptSeen(Set<String> seenConcepts , Concepts concepts){
-	return seenConcepts.add(concepts.getName());
+private Map<Category , List<Concepts>> groupConceptsByCategory(Project project){
+	Map<Category , List<Concepts>> groupedConcepts = new HashMap<>();
+	for(Concepts concept : project.getConcepts()) {
+		groupedConcepts.computeIfAbsent(concept.getCategory(), k -> new ArrayList<>()).add(concept);
+	}
+	return groupedConcepts;
 }
-private void addTechRecursive(Document document , Technology tech , int level , Set<Technology> seenTech , Project project) throws DocumentException {
-	if(!markTechSeen(seenTech, tech)) return;
-	
-	addIndentedParagraph(document, level, tech.getName());
-
-	Set<String> seenConcepts = new HashSet<>();
-	if (tech.getConcepts() != null && !tech.getConcepts().isEmpty()) {
-		for (Concepts concept : tech.getConcepts()) {
-			if (concept.getProjects().contains(project) && markConceptSeen(seenConcepts, concept)) {
-				addIndentedParagraph(document, level + 1, concept.getName());
-			}
-		}
+private void addConcepts(Document document , Project project) throws DocumentException {
+Map<Category , List<Concepts>> groupedConcepts = groupConceptsByCategory(project);
+if (groupedConcepts.isEmpty()) {
+	document.add(new Paragraph("Aucun concept associé à ce projet.", pdfFonts.italic()));
+	return;
 }
-	if (tech.getSubTechnologies() != null) {
-		for (Technology subTech : tech.getSubTechnologies()) {
-			addTechRecursive(document, subTech, level + 1, seenTech, project);
+for(Category category : groupedConcepts.keySet()) {
+	List<Concepts> list = groupedConcepts.get(category);
+	if (list != null && !list.isEmpty()) {
+		Paragraph title = new Paragraph(category.getName(), pdfFonts.bold());
+		document.add(title);
+		for(Concepts concept : list) {
+			addIndentedParagraph(document, 1, concept.getName());
 		}
 	}
+	document.add(pdfSpacer.small());
 }
+}
+private void addTechnologyWithConcepts(Document document , Project project) 
+	throws DocumentException , IOException {
 
-private void addTechnologyWithConcepts(Document document , Project project) throws DocumentException {
-	Set<Technology> seenTech = new HashSet<>();
     document.add(new Paragraph("Projet : " + project.getName(), pdfFonts.bold()));
-
-    if (project.getTechnology() == null || project.getTechnology().isEmpty()) {
-        document.add(new Paragraph("   Aucune technologie associée."));
-        return;
+	byte[] chartBytes = dougnutChartBuilder.createDoughnutChart(project );
+	 if (chartBytes != null && chartBytes.length > 0) {
+        dougnutChartBuilder.addDoughnutChart(document, chartBytes);
+    }else {
+        document.add(new Paragraph("Aucun graphique disponible", pdfFonts.italic()));
     }
-
-    for (Technology tech : project.getTechnology()) {
-        addTechRecursive(document, tech, 1, seenTech, project);
-    }
+   
+	document.add(pdfSpacer.small());
+	addConcepts(document,project);
+ 
 }
-private void addTechThree(Document document , List<Project> projects) throws DocumentException {
+private void addTechThree(Document document , List<Project> projects) throws DocumentException ,IOException {
 
 	for (Project project : projects){
 		addTechnologyWithConcepts(document, project);

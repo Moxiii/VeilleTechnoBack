@@ -3,12 +3,10 @@ package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.CategoryService;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
+
 
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Category.CatwithSub;
-import com.moxi.veilletechnoback.DTO.Category.sub.SubCategoryRes;
 import com.moxi.veilletechnoback.DTO.Project.BasicProjectRes;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyRes;
@@ -38,7 +36,6 @@ private final TechnologyService technologyService;
 
 private final CategoryService categoryService;
 
-private final SubCategoryService subCategoryService;
 
 private final SecurityUtils securityUtils;
 
@@ -59,9 +56,6 @@ private TechnologyRes techToRes(Technology technology) {
 			catDTO.setName(cat.getName());
 		}
 	}
-	List<SubCategory> subCats = subCategoryService.findByCategory(technology.getCategory());
-	List<SubCategoryRes> subCatDTO = subCats.stream().map(sub -> new SubCategoryRes(sub.getName())).toList();
-	catDTO.setSubCategories(subCatDTO);
 	res.setCategory(catDTO);
 	List<BasicProjectRes> basicProjects = new ArrayList<>();
 	if(technology.getProjects() != null){
@@ -102,15 +96,7 @@ public ResponseEntity<?> updateTechnology(@PathVariable long id, @RequestBody Te
 	User currentUser = securityUtils.getCurrentUser();
 	Technology technology = technologyService.findByUserAndId(currentUser,id);
 	Category category = categoryService.findById(updateTechnology.getCategoryId());
-	List<SubCategory> subCategories = new ArrayList<>();
-	if(updateTechnology.getSubCategoryIds() != null && !updateTechnology.getSubCategoryIds().isEmpty()){
-		subCategories = updateTechnology
-				.getSubCategoryIds()
-				.stream()
-				.map(subCategoryService::findById)
-				.toList();
-	}
-	technologyService.update(technology , updateTechnology.getName(), category , subCategories);
+	technologyService.update(technology , updateTechnology.getName(), category);
 	return new ResponseEntity<>(techToRes(technology), HttpStatus.OK);
 }
 @DeleteMapping("/{id}")

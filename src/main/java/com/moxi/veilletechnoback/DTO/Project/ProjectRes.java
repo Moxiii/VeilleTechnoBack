@@ -1,7 +1,10 @@
 package com.moxi.veilletechnoback.DTO.Project;
 
+import com.moxi.veilletechnoback.DTO.Concepts.ConceptsRes;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
 import com.moxi.veilletechnoback.Enum.Project.Status;
+import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,4 +23,5 @@ private LocalDate createdAt;
 private LocalDate startDate;
 private LocalDate endDate;
 private List<String> links;
+private List<ConceptsRes> concepts;
 }

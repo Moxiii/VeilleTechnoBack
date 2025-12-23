@@ -39,12 +39,7 @@ public TechUsageNode calculate(User user){
                 }
                 childNode.increment();
 
-                if (tech.getConcepts() != null) {
-                    childNode.getConceptsByProject().put(
-                        project,
-                        tech.getConcepts().stream().map(c -> c.getName()).toList()
-                    );
-                }
+           
             }
         }
     }

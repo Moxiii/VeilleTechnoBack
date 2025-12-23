@@ -4,6 +4,7 @@ import com.moxi.veilletechnoback.Enum.Project.Status;
 import com.moxi.veilletechnoback.Project.Features.Features;
 import com.moxi.veilletechnoback.Project.History.History;
 import com.moxi.veilletechnoback.Technology.Technology;
+import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
 import com.moxi.veilletechnoback.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -53,4 +54,10 @@ private List<Features> features = new ArrayList<>();
 private List<History> history = new ArrayList<>();
 @Column(length = 1000)
 private String pdfDescription;
+@ManyToMany
+@JoinTable(
+        name = "project_concepts",
+        joinColumns = @JoinColumn(name = "project_id")
+)
+private List<Concepts> concepts = new ArrayList<>();
 }

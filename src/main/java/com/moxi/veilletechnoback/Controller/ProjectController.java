@@ -1,6 +1,7 @@
 package com.moxi.veilletechnoback.Controller;
 
 import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
+import com.moxi.veilletechnoback.DTO.Concepts.ConceptsRes;
 import com.moxi.veilletechnoback.DTO.Project.ProjectReq;
 import com.moxi.veilletechnoback.DTO.Project.UpdateProjectReq;
 import com.moxi.veilletechnoback.DTO.Technology.BasicTechnologyRes;
@@ -57,6 +58,17 @@ private ProjectRes toRes(Project project) {
 	res.setStartDate(project.getStartDate());
 	res.setEndDate(project.getEndDate());
 	res.setLinks(project.getLinks());
+	List<ConceptsRes> conceptsRes = project.getConcepts().stream()
+    .map(c -> {
+        ConceptsRes cr = new ConceptsRes();
+        cr.setId(c.getId());
+        cr.setName(c.getName());
+        cr.setDescription(c.getDescription());
+        cr.setCategoryName(c.getCategory().getName());
+        return cr;
+    }).toList();
+
+	res.setConcepts(conceptsRes);
 	return res;
 }
 @GetMapping

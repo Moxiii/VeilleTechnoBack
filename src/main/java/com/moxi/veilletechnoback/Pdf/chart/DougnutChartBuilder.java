@@ -2,8 +2,9 @@ package com.moxi.veilletechnoback.Pdf.chart;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
@@ -12,17 +13,20 @@ import org.jfree.chart.plot.RingPlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.springframework.stereotype.Component;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-
+import com.itextpdf.text.Element;
+import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
-import com.moxi.veilletechnoback.User.User;
+
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class DougnutChartBuilder {
+	private final PdfSpacer pdfSpacer;
 private Technology findRooTechnology(Technology tech) {
 	Technology current = tech;
 	while(current.getParent() != null) {
@@ -30,26 +34,26 @@ private Technology findRooTechnology(Technology tech) {
 	}
 	return current;
 }
+public void addDoughnutChart(Document document, byte[] chartBytes) throws DocumentException, IOException {
+	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartBytes);
+	chart.scaleToFit(400f, 400f);
+	chart.setAlignment(Element.ALIGN_CENTER);
+    document.add(pdfSpacer.large());
+	document.add(chart);
+}
 public byte[] createDoughnutChart(Project project ) throws IOException, DocumentException {
 	DefaultPieDataset dataset = new DefaultPieDataset();
-
-	for(Project p : project){
-		Set<Technology> rootUsedInProject = new HashSet<>();
-		if(project.getTechnology() != null) {
-
-			for(Technology tech : project.getTechnology()) {
-			Technology root = findRooTechnology(tech);
-			rootUsedInProject.add(root);
-			}
-		};
-		for(Technology root : rootUsedInProject) {
-			String techName = root.getName();
-			double currentvalue = dataset.getKeys().contains(root.getName())? dataset.getValue(techName).doubleValue() : 0.0;
-			dataset.setValue(techName, currentvalue + 1);
-		}
-	}
-	 if (dataset.getItemCount() == 0) {
-        return new byte[0];
+ if (project.getTechnology() == null || project.getTechnology().isEmpty()) {
+        dataset.setValue("Aucune technologie", 1);
+    } else {
+        Map<String, Integer> rootCounts = new HashMap<>();
+        for (Technology tech : project.getTechnology()) {
+            Technology root = findRooTechnology(tech);
+            rootCounts.put(root.getName(), rootCounts.getOrDefault(root.getName(), 0) + 1);
+        }
+        for (Map.Entry<String, Integer> entry : rootCounts.entrySet()) {
+            dataset.setValue(entry.getKey(), entry.getValue());
+        }
     }
 	JFreeChart chart = ChartFactory.createRingChart(
 			"",

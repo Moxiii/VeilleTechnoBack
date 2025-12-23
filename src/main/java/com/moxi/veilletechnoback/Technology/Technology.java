@@ -3,7 +3,7 @@ package com.moxi.veilletechnoback.Technology;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.moxi.veilletechnoback.Category.Category;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
+
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.User.User;
 import jakarta.persistence.*;
@@ -40,15 +40,10 @@ private List<Project> projects;
 private List<Ressources> resources;
 @ManyToOne
 private Category category;
-@ManyToMany
-private List<SubCategory> subCategory = new ArrayList<>();
 @ManyToOne
 @JoinColumn(name = "parent_id")
 private Technology parent;
 @OneToMany(mappedBy = "parent")
 private List<Technology> subTechnologies = new ArrayList<>();
-@ElementCollection
-@CollectionTable(name = "technology_concepts", joinColumns = @JoinColumn(name = "technology_id"))
-@Column(name = "concept")
-private List<Concepts> concepts = new ArrayList<>();	
+
 }

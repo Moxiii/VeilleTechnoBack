@@ -2,8 +2,7 @@ package com.moxi.veilletechnoback.Technology;
 
 import com.moxi.veilletechnoback.Category.Category;
 import com.moxi.veilletechnoback.Category.CategoryService;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategory;
-import com.moxi.veilletechnoback.Category.SubCat.SubCategoryService;
+
 import com.moxi.veilletechnoback.DTO.Technology.TechnologyReq;
 import com.moxi.veilletechnoback.User.User;
 
@@ -24,7 +23,7 @@ private final TechnologyRepository technologyRepository;
 
 private final CategoryService categoryService;
 
-private final SubCategoryService subCategoryService;
+
 
 public List<Technology> findAll() {
 	return technologyRepository.findAll();
@@ -47,21 +46,13 @@ public Technology create(TechnologyReq req, User user) {
 	technology.setCategory(category);
 	technology.setCreatedAt(LocalDate.now());
 
-	if (req.getSubCategoryIds() != null && !req.getSubCategoryIds().isEmpty()) {
-		List<SubCategory> subCategories = req.getSubCategoryIds()
-				.stream()
-				.map(subCategoryService::findById)
-				.toList();
-		technology.setSubCategory(subCategories);
-	}
+
 
 	return technologyRepository.save(technology);
 }
-public void update(Technology tech, String name, Category category, List<SubCategory> subCategories) {
+public void update(Technology tech, String name, Category category) {
 	if (name != null) tech.setName(name);
 	if (category != null) tech.setCategory(category);
-	if (subCategories != null && !subCategories.isEmpty()) tech.setSubCategory(subCategories);
-
 	technologyRepository.save(tech);
 }
 public void delete(Technology technology) {
@@ -74,4 +65,5 @@ public List<Technology> findAllById(List<Long> id) {
 public List<Technology> findByParentIsNullAndUser(User user) {
 	return technologyRepository.findByParentIsNullAndUser(user);
 }
+
 }

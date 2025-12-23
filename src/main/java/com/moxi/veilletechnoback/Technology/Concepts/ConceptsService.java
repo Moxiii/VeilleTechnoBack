@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ConceptsService {
     private final ConceptsRepository conceptsRepository;
-    private final TechnologyRepository technologyRepository;
     private final ProjectRepository projectRepository;
     private final SecurityUtils securityUtils;
     private User getCurrentUser() {
@@ -30,10 +29,7 @@ public class ConceptsService {
         Concepts c = new Concepts();
         c.setName(req.getName());
         c.setDescription(req.getDescription());
-        Technology tech = technologyRepository.findById(req.getTechnologyId())
-                .orElseThrow(() -> new IllegalArgumentException("Technology not found with id: " + req.getTechnologyId()));
-                c.setTechnology(tech);
-                if(req.getProjectIds() != null && !req.getProjectIds().isEmpty()) {
+        if(req.getProjectIds() != null && !req.getProjectIds().isEmpty()) {
                     List<Project> projects = req.getProjectIds().stream()
                     .map(id -> projectRepository.findByUserAndId(currentUser, id)
                     .orElseThrow(() -> new IllegalArgumentException("Project not found: " + id)))
@@ -50,11 +46,6 @@ public class ConceptsService {
 
         c.setName(req.getName());
         c.setDescription(req.getDescription());
-
-        Technology tech = technologyRepository.findById(req.getTechnologyId())
-                .orElseThrow(() -> new RuntimeException("Technology not found"));
-        c.setTechnology(tech);
-
             List<Project> projects = req.getProjectIds().stream()
             .map(projectId -> projectRepository.findByUserAndId(currentUser, projectId)
                     .orElseThrow(() -> new IllegalArgumentException("Project not found: " + projectId)))

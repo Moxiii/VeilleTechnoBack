@@ -29,8 +29,7 @@ public class ConceptsController {
         res.setId(c.getId());
         res.setName(c.getName());
         res.setDescription(c.getDescription());
-        res.setTechnologyId(c.getTechnology().getId());
-        res.setProjectIds(c.getProjects().stream().map(Project::getId).toList());
+        res.setProjectsId(c.getProjects().stream().map(Project::getId).toList());
         return res;
     }
 @PostMapping
