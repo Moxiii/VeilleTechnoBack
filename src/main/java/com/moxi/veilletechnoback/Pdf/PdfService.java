@@ -29,7 +29,7 @@ private final Header header;
 private final ProjectSection projectSection;
 private final TechnologyThreeSection technologyThreeSection;
 private final Footer footer;
-public ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
+public synchronized ByteArrayInputStream generateUserReport(User user , PdfReportOptions options) throws IOException, DocumentException {
 	Document document = new Document();
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	try{

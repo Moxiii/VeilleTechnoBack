@@ -67,12 +67,7 @@ private void addTechnologyWithConcepts(Document document , Project project)
 	throws DocumentException , IOException {
 
     document.add(new Paragraph("Projet : " + project.getName(), pdfFonts.bold()));
-	byte[] chartBytes = dougnutChartBuilder.createDoughnutChart(project );
-	 if (chartBytes != null && chartBytes.length > 0) {
-        dougnutChartBuilder.addDoughnutChart(document, chartBytes);
-    }else {
-        document.add(new Paragraph("Aucun graphique disponible", pdfFonts.italic()));
-    }
+	dougnutChartBuilder.addDoughnutChart(document, project);
    
 	document.add(pdfSpacer.small());
 	addConcepts(document,project);
@@ -86,7 +81,7 @@ private void addTechThree(Document document , List<Project> projects) throws Doc
 	}
 
 }
-public void render(Document document , User user) throws DocumentException, IOException {
+public synchronized void render(Document document , User user) throws DocumentException, IOException {
 	addSectionTitle.create(document, "Notions aborder par technologie");
 	document.add(pdfSpacer.small());
 	List<Project>userProjects = user.getProjects();

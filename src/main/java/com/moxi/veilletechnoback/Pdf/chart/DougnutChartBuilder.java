@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
 import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DougnutChartBuilder {
 	private final PdfSpacer pdfSpacer;
+	private final PdfFonts pdfFonts;
 private Technology findRooTechnology(Technology tech) {
 	Technology current = tech;
 	while(current.getParent() != null) {
@@ -34,14 +37,21 @@ private Technology findRooTechnology(Technology tech) {
 	}
 	return current;
 }
-public void addDoughnutChart(Document document, byte[] chartBytes) throws DocumentException, IOException {
+public synchronized void addDoughnutChart(Document document, Project project) throws DocumentException, IOException {
+	byte[] chartBytes = createDoughnutChart(project);
+
+	if (chartBytes == null || chartBytes.length == 0) {
+		document.add(new Paragraph("Impossible de générer le graphique des technologies.", pdfFonts.italic()));
+		return;
+	}
+	
 	com.itextpdf.text.Image chart = com.itextpdf.text.Image.getInstance(chartBytes);
 	chart.scaleToFit(400f, 400f);
 	chart.setAlignment(Element.ALIGN_CENTER);
     document.add(pdfSpacer.large());
 	document.add(chart);
 }
-public byte[] createDoughnutChart(Project project ) throws IOException, DocumentException {
+private synchronized byte[] createDoughnutChart(Project project ) throws IOException, DocumentException {
 	DefaultPieDataset dataset = new DefaultPieDataset();
  if (project.getTechnology() == null || project.getTechnology().isEmpty()) {
         dataset.setValue("Aucune technologie", 1);
