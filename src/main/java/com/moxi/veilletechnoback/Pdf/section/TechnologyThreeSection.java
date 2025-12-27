@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.moxi.veilletechnoback.Category.Category;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.Document;
@@ -21,15 +23,17 @@ import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TechnologyThreeSection {
 private final PdfSpacer pdfSpacer;
 private final AddSectionTitle addSectionTitle;
 private final PdfFonts pdfFonts;
 private static final int INDENT_SIZE = 3;
-private final DougnutChartBuilder dougnutChartBuilder;
+private final ObjectProvider<DougnutChartBuilder> dougnutChartBuilderProvider;
 
 
 private void addIndentedParagraph(Document document , int level , String name) throws DocumentException {
@@ -56,7 +60,7 @@ for(Category category : groupedConcepts.keySet()) {
 	if (list != null && !list.isEmpty()) {
 		Paragraph title = new Paragraph(category.getName(), pdfFonts.bold());
 		document.add(title);
-		for(Concepts concept : list) {
+		for(Concepts concept : list) {	
 			addIndentedParagraph(document, 1, concept.getName());
 		}
 	}
@@ -67,6 +71,10 @@ private void addTechnologyWithConcepts(Document document , Project project)
 	throws DocumentException , IOException {
 
     document.add(new Paragraph("Projet : " + project.getName(), pdfFonts.bold()));
+	log.info("🟦 GENERATING GRAPH FOR PROJECT: {} (id={})", project.getName(), project.getId());
+	DougnutChartBuilder dougnutChartBuilder = dougnutChartBuilderProvider.getObject();
+	log.info("🟩 NEW CHART BUILDER INSTANCE: {}", dougnutChartBuilder);
+	log.info("🟦 Project instance hashCode={} for project '{}'", project.hashCode(), project.getName());
 	dougnutChartBuilder.addDoughnutChart(document, project);
    
 	document.add(pdfSpacer.small());
@@ -82,9 +90,11 @@ private void addTechThree(Document document , List<Project> projects) throws Doc
 
 }
 public synchronized void render(Document document , User user) throws DocumentException, IOException {
+	log.info("🧩 [TECH SECTION] START RENDER");
 	addSectionTitle.create(document, "Notions aborder par technologie");
 	document.add(pdfSpacer.small());
 	List<Project>userProjects = user.getProjects();
 	addTechThree(document, userProjects);
+	log.info("🧩 [TECH SECTION] END RENDER");
 }
 }

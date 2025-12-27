@@ -8,8 +8,7 @@ import com.moxi.veilletechnoback.Config.Security.SecurityUtils;
 import com.moxi.veilletechnoback.DTO.Concepts.ConceptsReq;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Project.ProjectRepository;
-import com.moxi.veilletechnoback.Technology.Technology;
-import com.moxi.veilletechnoback.Technology.TechnologyRepository;
+
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
