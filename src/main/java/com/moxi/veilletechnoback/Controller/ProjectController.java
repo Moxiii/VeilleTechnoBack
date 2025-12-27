@@ -65,6 +65,7 @@ private ProjectRes toRes(Project project) {
         cr.setName(c.getName());
         cr.setDescription(c.getDescription());
         cr.setCategoryName(c.getCategory().getName());
+		cr.setProjectsId(c.getProjects().stream().map(Project::getId).toList());
         return cr;
     }).toList();
 

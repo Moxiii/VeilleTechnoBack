@@ -56,8 +56,9 @@ private List<History> history = new ArrayList<>();
 private String pdfDescription;
 @ManyToMany
 @JoinTable(
-        name = "project_concepts",
-        joinColumns = @JoinColumn(name = "project_id")
+        name = "concept_project",
+        joinColumns = @JoinColumn(name = "project_id"),
+		inverseJoinColumns = @JoinColumn(name = "concept_id")
 )
 private List<Concepts> concepts = new ArrayList<>();
 }
