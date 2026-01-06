@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
-import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
-import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
+import com.moxi.veilletechnoback.Pdf.Utils.font.PdfFonts;
+import com.moxi.veilletechnoback.Pdf.Utils.spacer.PdfSpacer;
 
 import lombok.RequiredArgsConstructor;
 

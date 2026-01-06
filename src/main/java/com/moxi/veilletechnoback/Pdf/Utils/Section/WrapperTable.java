@@ -1,4 +1,4 @@
-package com.moxi.veilletechnoback.Pdf.section.Utils;
+package com.moxi.veilletechnoback.Pdf.Utils.Section;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.PdfPCell;

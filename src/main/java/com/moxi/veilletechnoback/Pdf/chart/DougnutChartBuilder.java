@@ -19,8 +19,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
-
+import com.moxi.veilletechnoback.Pdf.Utils.Hierarchy.Resolver;
+import com.moxi.veilletechnoback.Pdf.Utils.font.PdfFonts;
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
 
@@ -32,13 +32,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DougnutChartBuilder {
 	private final PdfFonts pdfFonts;
-private Technology findRooTechnology(Technology tech) {
-	Technology current = tech;
-	while(current.getParent() != null) {
-		current = current.getParent();
-	}
-	return current;
-}
+	private final Resolver hierarchyResolver;
+
 public synchronized void addDoughnutChart(Document document, Project project) throws DocumentException, IOException {
 	byte[] chartBytes = createDoughnutChart(project);
 	if (chartBytes == null || chartBytes.length == 0) {
@@ -59,7 +54,7 @@ private synchronized byte[] createDoughnutChart(Project project ) throws IOExcep
         Map<String, Integer> rootCounts = new HashMap<>();
 
         for (Technology tech : project.getTechnology()) {
-            Technology root = findRooTechnology(tech);
+            Technology root = hierarchyResolver.getRootTechnology(tech);
 			
             rootCounts.put(root.getName(), rootCounts.getOrDefault(root.getName(), 0) + 1);
         }

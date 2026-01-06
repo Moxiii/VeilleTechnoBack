@@ -14,11 +14,13 @@ import org.springframework.stereotype.Component;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
+import com.moxi.veilletechnoback.Pdf.Utils.Hierarchy.Resolver;
+import com.moxi.veilletechnoback.Pdf.Utils.Section.AddSectionTitle;
+import com.moxi.veilletechnoback.Pdf.Utils.font.PdfFonts;
+import com.moxi.veilletechnoback.Pdf.Utils.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Pdf.chart.DougnutChartBuilder;
-import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
-import com.moxi.veilletechnoback.Pdf.section.Utils.AddSectionTitle;
-import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
+import com.moxi.veilletechnoback.Technology.Technology;
 import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
 import com.moxi.veilletechnoback.User.User;
 
@@ -34,7 +36,7 @@ private final AddSectionTitle addSectionTitle;
 private final PdfFonts pdfFonts;
 private static final int INDENT_SIZE = 3;
 private final ObjectProvider<DougnutChartBuilder> dougnutChartBuilderProvider;
-
+private final Resolver hierarchyResolver;
 
 private void addIndentedParagraph(Document document , int level , String name) throws DocumentException {
 	document.add(new Paragraph(getIndent(level) + "- " + name));
@@ -77,6 +79,8 @@ private void addTechnologyWithConcepts(Document document , Project project)
 	dougnutChartBuilder.addDoughnutChart(document, project);
    
 	document.add(pdfSpacer.small());
+	addLibrairies(document,project);
+	document.add(pdfSpacer.small());
 	addConcepts(document,project);
  
 }
@@ -87,6 +91,30 @@ private void addTechThree(Document document , List<Project> projects) throws Doc
 		document.add(pdfSpacer.small());
 	}
 
+}
+private void addLibrairies(Document document , Project project) throws DocumentException {
+	document.add(new Paragraph("Librairies utilisées :", pdfFonts.bold()));
+	Map<String, List<String>> libsByParent = new HashMap<>();
+	for(Technology tech : project.getTechnology()) {
+		if(tech.getParent() != null){
+			Technology root = hierarchyResolver.getRootTechnology(tech);
+			libsByParent.computeIfAbsent(root.getName(), k -> new ArrayList<>()).add(tech.getName());
+		}
+	}
+if (libsByParent.isEmpty()) {
+		document.add(new Paragraph("Aucune librairie associée à ce projet.", pdfFonts.italic()));
+		return;
+	}
+  for (Map.Entry<String, List<String>> entry : libsByParent.entrySet()) {
+        String parent = entry.getKey();
+        List<String> libs = entry.getValue();
+
+        document.add(new Paragraph(
+            parent + " : " + String.join(", ", libs),
+            pdfFonts.body()
+        ));
+    }	
+	document.add(pdfSpacer.small());
 }
 public synchronized void render(Document document , User user) throws DocumentException, IOException {
 	addSectionTitle.create(document, "Notions aborder par projet");

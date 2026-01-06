@@ -15,11 +15,11 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.moxi.veilletechnoback.Pdf.PdfReportOptions;
-import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
-import com.moxi.veilletechnoback.Pdf.section.Utils.AddSectionTitle;
-import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
+import com.moxi.veilletechnoback.Pdf.Utils.Section.AddSectionTitle;
+import com.moxi.veilletechnoback.Pdf.Utils.font.PdfFonts;
+import com.moxi.veilletechnoback.Pdf.Utils.spacer.PdfSpacer;
 import com.moxi.veilletechnoback.Project.Project;
-import com.moxi.veilletechnoback.Technology.Technology;
+
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
@@ -64,24 +64,18 @@ private PdfPCell createCell(String text , boolean isHeader  ){
 }
 private void addProjectTable(Document document, List<Project> projects) throws DocumentException {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	PdfPTable table = new PdfPTable(4);
+	PdfPTable table = new PdfPTable(3);
 	table.setWidthPercentage(100);
     document.add(pdfSpacer.large());
-	table.setWidths(new float[]{2f, 2f, 3f , 1f});
+	table.setWidths(new float[]{2f, 2f, 2f });
 
 	table.addCell(createCell("Projet", true));
 	table.addCell(createCell("Status", true));
-	table.addCell(createCell("Technologies", true));
 	table.addCell(createCell("Modifié le", true));
-
-	
 
 	for (Project p : projects) {
 		table.addCell(createCell(p.getName(), false));
 		table.addCell(createCell(p.getStatus().toString(), false));
-		table.addCell(createCell(p.getTechnology().stream()
-				.map(Technology::getName)
-				.collect(Collectors.joining(", ")), false));
 		String updatedAt = p.getUpdatedAt() != null ? 
 		p.getUpdatedAt().format(formatter) :
 		 "Non modifié";

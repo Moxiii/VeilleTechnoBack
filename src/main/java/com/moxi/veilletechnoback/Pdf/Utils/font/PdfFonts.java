@@ -1,4 +1,4 @@
-package com.moxi.veilletechnoback.Pdf.font;
+package com.moxi.veilletechnoback.Pdf.Utils.font;
 
 import org.springframework.stereotype.Component;
 

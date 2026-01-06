@@ -1,4 +1,4 @@
-package com.moxi.veilletechnoback.Pdf.spacer;
+package com.moxi.veilletechnoback.Pdf.Utils.spacer;
 
 import org.springframework.stereotype.Component;
 
