@@ -78,7 +78,6 @@ private void addProjectTable(Document document, List<Project> projects) throws D
 	document.add(table);
 }
 public void render(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
-	log.info("📘 [PROJECT SECTION] START RENDER");
 	addSectionTitle.create(document, "Projets");
 	List<Project> filteredrojects = user.getProjects().stream()
 			.filter(p->options.isIncludeAllProjects() || 
@@ -87,6 +86,6 @@ public void render(Document document , PdfReportOptions options , User user) thr
 	if(!filteredrojects.isEmpty()){
 		addProjectTable(document, filteredrojects);
 	}
-	log.info("📘 [PROJECT SECTION] END RENDER");
+
 }
 }

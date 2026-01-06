@@ -22,7 +22,7 @@ private final PdfFonts pdfFonts;
 private final PdfSpacer pdfSpacer;
 
 public void render(Document document, User user) throws DocumentException {
-	log.info("📄 [HEADER] START RENDER");
+
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	Paragraph title = new Paragraph("Rapport de veille technologique", pdfFonts.header());
 	title.setAlignment(Paragraph.ALIGN_CENTER);
@@ -34,6 +34,6 @@ public void render(Document document, User user) throws DocumentException {
 	date.setAlignment(Paragraph.ALIGN_CENTER);
 	document.add(date);
 	document.add(pdfSpacer.title());
-	log.info("📄 [HEADER] END RENDER");
+
 }
 }

@@ -34,7 +34,8 @@ public synchronized ByteArrayInputStream generateUserReport(User user , PdfRepor
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	try{
 
-	PdfWriter.getInstance(document , outputStream);
+	PdfWriter writer = PdfWriter.getInstance(document , outputStream);
+	writer.setStrictImageSequence(true);
 	document.open();
 	header.render(document , user);
 	projectSection.render(document,options, user);
