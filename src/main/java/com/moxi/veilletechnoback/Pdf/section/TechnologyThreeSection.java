@@ -23,11 +23,11 @@ import com.moxi.veilletechnoback.Technology.Concepts.Concepts;
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
+
 public class TechnologyThreeSection {
 private final PdfSpacer pdfSpacer;
 private final AddSectionTitle addSectionTitle;
@@ -71,6 +71,7 @@ private void addTechnologyWithConcepts(Document document , Project project)
 	throws DocumentException , IOException {
 
     document.add(new Paragraph("Projet : " + project.getName(), pdfFonts.bold()));
+	document.add(pdfSpacer.small());
 	DougnutChartBuilder dougnutChartBuilder = dougnutChartBuilderProvider.getObject();
 
 	dougnutChartBuilder.addDoughnutChart(document, project);

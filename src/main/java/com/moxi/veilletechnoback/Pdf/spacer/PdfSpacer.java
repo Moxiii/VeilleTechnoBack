@@ -13,15 +13,15 @@ public class PdfSpacer {
     };
 
   public Paragraph title() {
-        return spacer(14f);
-    }
-
-    public Paragraph large() {
         return spacer(10f);
     }
 
+    public Paragraph large() {
+        return spacer(8f);
+    }
+
     public Paragraph medium() {
-        return spacer(6f);
+        return spacer(5f);
     }
 
     public Paragraph small() {

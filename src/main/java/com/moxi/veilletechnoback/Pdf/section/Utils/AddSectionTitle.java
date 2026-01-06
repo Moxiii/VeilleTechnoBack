@@ -20,5 +20,6 @@ public void create(Document document, String titleText) throws DocumentException
 	sectionTitle.setAlignment(Paragraph.ALIGN_MIDDLE);
     document.add(pdfSpacer.title());
 	document.add(sectionTitle);
+	document.add(pdfSpacer.medium());
 }
 }

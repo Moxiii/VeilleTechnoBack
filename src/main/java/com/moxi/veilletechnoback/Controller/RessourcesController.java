@@ -14,7 +14,7 @@ import com.moxi.veilletechnoback.Technology.TechnologyService;
 import com.moxi.veilletechnoback.User.User;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-@Slf4j
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/ressources")

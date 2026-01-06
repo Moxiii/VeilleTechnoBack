@@ -20,13 +20,12 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.moxi.veilletechnoback.Pdf.font.PdfFonts;
-import com.moxi.veilletechnoback.Pdf.spacer.PdfSpacer;
+
 import com.moxi.veilletechnoback.Project.Project;
 import com.moxi.veilletechnoback.Technology.Technology;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Scope("prototype")
 @Component
