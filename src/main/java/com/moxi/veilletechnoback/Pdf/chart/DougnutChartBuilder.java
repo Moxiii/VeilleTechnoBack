@@ -28,12 +28,10 @@ import com.moxi.veilletechnoback.Technology.Technology;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Scope("prototype")
 @Component
 @RequiredArgsConstructor
 public class DougnutChartBuilder {
-	private final PdfSpacer pdfSpacer;
 	private final PdfFonts pdfFonts;
 private Technology findRooTechnology(Technology tech) {
 	Technology current = tech;
@@ -52,7 +50,6 @@ public synchronized void addDoughnutChart(Document document, Project project) th
 	Image chart = Image.getInstance(chartBytes);
 	chart.scaleToFit(400f, 400f);
 	chart.setAlignment(Element.ALIGN_CENTER);
-    document.add(pdfSpacer.large());
 	document.add(chart);
 }
 private synchronized byte[] createDoughnutChart(Project project ) throws IOException, DocumentException {

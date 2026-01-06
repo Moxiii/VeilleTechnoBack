@@ -27,4 +27,7 @@ public class PdfSpacer {
     public Paragraph small() {
         return spacer(3f);
     }
+    public Paragraph tiny() {
+        return spacer(1f);
+    }
 }

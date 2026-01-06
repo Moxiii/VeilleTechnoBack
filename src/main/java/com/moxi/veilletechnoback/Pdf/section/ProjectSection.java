@@ -31,7 +31,20 @@ public class ProjectSection {
 private final PdfFonts pdfFonts;
 private final PdfSpacer pdfSpacer;
 private final AddSectionTitle addSectionTitle;
-
+private void addProjectDescritpion(Document document , List<Project> projects) throws DocumentException {
+	document.add(pdfSpacer.tiny());
+	document.add(new Paragraph("Description des projets:", pdfFonts.bold()));
+	for(Project p : projects) {
+		document.add(pdfSpacer.small());
+		document.add(new Paragraph("Projet : " + p.getName(), pdfFonts.bold()));
+	if (p.getPdfDescription() == null || p.getPdfDescription().isEmpty()) {
+		document.add(new Paragraph("Aucune description disponible.", pdfFonts.italic()));
+	} else {
+		document.add(new Paragraph(p.getPdfDescription(), pdfFonts.body()));
+	}
+	document.add(pdfSpacer.small());
+}
+}
 private PdfPCell createCell(String text , boolean isHeader  ){
     Font font = isHeader ? pdfFonts.tableHeader() : pdfFonts.tableBody();
 
@@ -79,12 +92,13 @@ private void addProjectTable(Document document, List<Project> projects) throws D
 }
 public void render(Document document , PdfReportOptions options , User user) throws DocumentException, IOException {
 	addSectionTitle.create(document, "Projets");
-	List<Project> filteredrojects = user.getProjects().stream()
+	List<Project> filteredprojects = user.getProjects().stream()
 			.filter(p->options.isIncludeAllProjects() || 
 			(options.getProjectIdsToInclude() != null && options.getProjectIdsToInclude().contains(p.getId())))
 			.collect(Collectors.toList());
-	if(!filteredrojects.isEmpty()){
-		addProjectTable(document, filteredrojects);
+	if(!filteredprojects.isEmpty()){
+		addProjectDescritpion(document, filteredprojects);
+		addProjectTable(document, filteredprojects);
 	}
 
 }
